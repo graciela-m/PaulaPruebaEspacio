@@ -1,0 +1,51 @@
+{
+  "languagePrompt": "SELECT LANGUAGE",
+  "languageOptions": { "es": "ESPAÑOL", "en": "ENGLISH" },
+  "homeTagline": "Every mission leaves a story behind.",
+  "buttons": {
+    "start": "START MISSION",
+    "continue": "CONTINUE",
+    "back": "BACK TO START",
+    "startExploration": "START EXPLORATION",
+    "close": "CLOSE"
+  },
+  "exploration": {
+    "subtitle": "Space exploration",
+    "movementHint": "WASD / Arrows: move spacecraft",
+    "discoveredLabel": "Object discovered",
+    "interactHint": "Press E to explore",
+    "surfaceMarkerLabel": "Schematic surface location",
+    "unavailableDataLabel": "Exact location unavailable",
+    "infoLabels": {
+      "description": "DESCRIPTION",
+      "diameter": "REAL DIAMETER",
+      "distanceFromSun": "AVERAGE DISTANCE FROM THE SUN",
+      "distanceFromParent": "AVERAGE ORBITAL DISTANCE",
+      "parent": "ORBITS",
+      "characteristics": "CHARACTERISTICS",
+      "history": "OBSERVATION HISTORY",
+      "discovery": "DISCOVERY",
+      "importance": "SCIENTIFIC IMPORTANCE",
+      "interestingFact": "DID YOU KNOW?",
+      "mission": "MISSION",
+      "launchYear": "LAUNCH YEAR",
+      "destination": "DESTINATION",
+      "objective": "SCIENCE OBJECTIVE",
+      "discoveries": "DISCOVERIES",
+      "status": "CURRENT STATUS",
+      "location": "LOCATION",
+      "whyRemains": "WHY IT REMAINS",
+      "legacy": "SCIENTIFIC LEGACY",
+      "source": "SOURCE"
+    }
+  },
+  "story": {
+    "finalMessage": "YOUR MISSION STARTS NOW",
+    "messages": {
+      "human-exploration": "For decades, humanity has explored beyond Earth.",
+      "machines-and-discovery": "On the Moon, Mars, and other corners of space, machines were left behind that changed how we understand the universe.",
+      "stories-remain": "Some stopped working. Others continue their journey. But their stories are still alive.",
+      "the-mission": "Your mission is to discover them."
+    }
+  }
+}
