@@ -5,6 +5,7 @@ const colorValue = (hex) => Number.parseInt(hex.slice(1), 16);
 export default function createStarfield(scene, config, options = {}) {
   const layers = config.world.starfield.layers;
   const { width, height } = options.worldSize ?? scene.scale.gameSize;
+  const densityScale = options.densityScale ?? 1;
   const expandedWidth = options.worldSize ? width * 2 : width;
   const expandedHeight = options.worldSize ? height * 2 : height;
   const originX = options.worldSize ? -width / 2 : 0;
@@ -13,7 +14,8 @@ export default function createStarfield(scene, config, options = {}) {
 
   layers.forEach((layer, layerIndex) => {
     const graphics = scene.add.graphics();
-    for (let index = 0; index < layer.count; index += 1) {
+    const starCount = Math.round(layer.count * densityScale);
+    for (let index = 0; index < starCount; index += 1) {
       const radius = Phaser.Math.FloatBetween(layer.minRadius, layer.maxRadius);
       const alpha = Phaser.Math.FloatBetween(layer.minAlpha, layer.maxAlpha);
       graphics.fillStyle(colorValue(config.palette.star), alpha);
@@ -30,7 +32,7 @@ export default function createStarfield(scene, config, options = {}) {
     objects.push(graphics);
   });
 
-  const twinkleCount = config.world.starfield.twinkleCount;
+  const twinkleCount = Math.round(config.world.starfield.twinkleCount * densityScale);
   for (let index = 0; index < twinkleCount; index += 1) {
     const star = scene.add
       .circle(

@@ -50,6 +50,7 @@
       "visual": {
         "imageId": "planet_venus_sprite",
         "colorKey": "venus",
+        "atmosphereColorKey": "venusCloud",
         "radiusScale": 1,
         "surfaceStyle": "clouded-atmosphere",
         "bands": [
@@ -83,8 +84,9 @@
       "distanceFromEarthKm": 0,
       "visualAngleDegrees": 2.2,
       "visual": {
-        "imageId": null,
         "colorKey": "earth",
+        "imageId": "planet_earth_sprite",
+        "atmosphereColorKey": "cabin",
         "accentColorKey": "earthLand",
         "radiusScale": 1,
         "surfaceStyle": "terrestrial",
@@ -125,6 +127,7 @@
       "visual": {
         "imageId": "planet_mars_sprite",
         "colorKey": "mars",
+        "atmosphereColorKey": "marsRim",
         "accentColorKey": "engineHot",
         "radiusScale": 1,
         "surfaceStyle": "rusted-rock",
@@ -161,8 +164,9 @@
       "distanceFromEarthKm": 628730000,
       "visualAngleDegrees": -4.18,
       "visual": {
-        "imageId": null,
+        "imageId": "planet_jupiter_sprite",
         "colorKey": "jupiter",
+        "atmosphereColorKey": "jupiterLightBand",
         "radiusScale": 1,
         "surfaceStyle": "gas-bands",
         "bands": [
@@ -202,8 +206,9 @@
       "distanceFromEarthKm": 1275000000,
       "visualAngleDegrees": 4.73,
       "visual": {
-        "imageId": null,
+        "imageId": "planet_saturn_sprite",
         "colorKey": "saturn",
+        "atmosphereColorKey": "saturnRing",
         "radiusScale": 1,
         "surfaceStyle": "gas-bands",
         "bands": [
@@ -238,8 +243,9 @@
       "distanceFromEarthKm": 2723950000,
       "visualAngleDegrees": -3.18,
       "visual": {
-        "imageId": null,
+        "imageId": "planet_uranus_sprite",
         "colorKey": "uranus",
+        "atmosphereColorKey": "uranusBand",
         "radiusScale": 1,
         "surfaceStyle": "ice-bands",
         "bands": [
@@ -272,8 +278,9 @@
       "distanceFromEarthKm": 4345000000,
       "visualAngleDegrees": 1.34,
       "visual": {
-        "imageId": null,
+        "imageId": "planet_neptune_sprite",
         "colorKey": "neptune",
+        "atmosphereColorKey": "neptuneBand",
         "radiusScale": 1,
         "surfaceStyle": "deep-ice-bands",
         "bands": [

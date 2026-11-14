@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { localizedField } from '../utils/localization.js';
+import createHoverLabel from '../utils/createHoverLabel.js';
 
 const colorValue = (hex) => Number.parseInt(hex.slice(1), 16);
 
@@ -23,16 +24,10 @@ export default class CelestialBody {
     } else {
       const halo = scene.add.circle(0, 0, this.radius + 11, glowColor, 0.035);
       this.container.add(halo);
+      if (data.visual.atmosphereColorKey) this.addAtmosphere(scene, data.visual);
     }
 
     if (data.visual.rings) this.addRings(scene, data.visual.rings);
-
-    const ring = scene.add
-      .circle(0, 0, this.radius + 8)
-      .setStrokeStyle(gameConfig.visual.proximityRingWidth, glowColor, 0.85)
-      .setVisible(false);
-    this.highlight = ring;
-    this.container.add(ring);
 
     const imageAvailable = data.visual.imageId
       && assets.images.some((image) => image.id === data.visual.imageId && !image.mapArtifacts)
@@ -46,18 +41,25 @@ export default class CelestialBody {
       this.addPlaceholder(scene, data);
     }
 
+    if (data.visual.atmosphereColorKey) this.addAtmosphereRim(scene, data.visual);
     if (data.visual.rings) this.addFrontRing(scene, data.visual.rings);
 
-    const label = scene.add.text(0, this.radius + 22, this.name, {
-      fontFamily: gameConfig.visual.bodyFontFamily,
-      fontSize: `${gameConfig.visual.celestialLabelFontSize}px`,
-      color: gameConfig.palette.text,
-      align: 'center',
-      stroke: gameConfig.palette.background,
-      strokeThickness: 4,
-    }).setOrigin(0.5, 0);
-    label.setWordWrapWidth(Math.max(128, this.radius * 3), true);
-    this.container.add(label);
+    const ring = scene.add
+      .circle(0, 0, this.radius + 8)
+      .setStrokeStyle(gameConfig.visual.proximityRingWidth, glowColor, 0.85)
+      .setVisible(false);
+    this.highlight = ring;
+    this.container.add(ring);
+
+    // Mantenemos tus etiquetas flotantes al pasar el cursor (hover)
+    createHoverLabel(
+      scene,
+      this.container,
+      this.name,
+      gameConfig,
+      { x: 0, y: -this.radius - 20 },
+      { x: 0, y: 0, radius: Math.max(this.radius, 14) },
+    );
   }
 
   addSolarCorona(scene, visual) {
@@ -71,6 +73,29 @@ export default class CelestialBody {
       this.container.add(scene.add.circle(0, 0, this.radius * factor, color, alpha));
     });
   }
+
+  addAtmosphere(scene, visual) {
+    const color = colorValue(this.palette[visual.atmosphereColorKey]);
+    [
+      { factor: 1.2, alpha: 0.025 },
+      { factor: 1.09, alpha: 0.055 },
+    ].forEach(({ factor, alpha }) => {
+      const glow = scene.add.circle(0, 0, this.radius * factor, color, alpha);
+      glow.setBlendMode(Phaser.BlendModes.ADD);
+      this.container.add(glow);
+    });
+  }
+
+  addAtmosphereRim(scene, visual) {
+    const rim = scene.add.circle(0, 0, this.radius + 0.5)
+      .setStrokeStyle(
+        Math.max(1, this.radius * 0.025),
+        colorValue(this.palette[visual.atmosphereColorKey]),
+        0.38,
+      );
+    this.container.add(rim);
+  }
+
 
   addRings(scene, ringData) {
     const ring = scene.add.graphics();

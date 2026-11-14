@@ -23,7 +23,8 @@ export default function createActionButton(scene, options) {
   container.setSize(width, height);
 
   const createHitArea = (buttonWidth, buttonHeight) =>
-    new Phaser.Geom.Rectangle(0, 0, buttonWidth, buttonHeight);
+    new Phaser.Geom.Rectangle(-buttonWidth / 2, -buttonHeight / 2, buttonWidth, buttonHeight);
+  
   container.setInteractive(createHitArea(width, height), Phaser.Geom.Rectangle.Contains);
   let enabled = true;
 
@@ -59,7 +60,7 @@ export default function createActionButton(scene, options) {
     setSize(nextWidth, nextHeight) {
       background.setSize(nextWidth, nextHeight);
       container.setSize(nextWidth, nextHeight);
-      container.input.hitArea.setTo(0, 0, nextWidth, nextHeight);
+      container.setInteractive(createHitArea(nextWidth, nextHeight), Phaser.Geom.Rectangle.Contains);
     },
     setEnabled(value) {
       enabled = value;

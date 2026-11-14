@@ -52,14 +52,54 @@
   },
   "exploration": {
     "subtitle": "Exploración espacial",
-    "movementHint": "WASD / Flechas: mover nave",
+    "movementHint": "WASD / Flechas: mover nave · F: linterna",
+    "flashlightOn": "LINTERNA: ENCENDIDA",
+    "flashlightOff": "LINTERNA: APAGADA · F",
+    "zoomLabel": "Zoom",
     "discoveredLabel": "Objeto descubierto",
     "interactHint": "Presiona E para explorar",
+    "surfaceMode": {
+      "enterHint": "Presiona Q para explorar superficie • E para ver info",
+      "exitHint": "WASD / Flechas: pilotar · Q: volver al espacio",
+      "missionHint": "WASD / Flechas: pilotar · E: ver info · Q: volver al espacio",
+      "objectiveCount": "Equipos encontrados: {found}/{total}"
+    },
     "surfaceMarkerLabel": "Ubicación superficial esquemática",
     "unavailableDataLabel": "Ubicación exacta no disponible",
+    "timeline": {
+      "title": "LÍNEA DE TIEMPO",
+      "all": "VER TODO",
+      "activeMissionSingular": "misión activa",
+      "activeMissionPlural": "misiones activas",
+      "milestones": {
+        "1969": "1969: El módulo lunar Apollo 11 llega a la Luna.",
+        "1971": "1971: El rover lunar Apollo 15 amplía la exploración de la superficie.",
+        "1997": "1997: Sojourner se convierte en el primer rover en operar en Marte.",
+        "2004": "2004: Spirit y Opportunity comienzan a explorar Marte.",
+        "2018": "2018: InSight llega a Marte para estudiar su interior."
+      }
+    },
+    "archive": {
+      "title": "ARCHIVO DE LEGADO",
+      "duration": "Duración de misión",
+      "naturalWorld": "Mundo natural",
+      "naturalSatellite": "Satélite natural",
+      "starStatus": "Estrella de secuencia principal",
+      "noMission": "No aplica: cuerpo celeste sin misión de superficie.",
+      "tabs": {
+        "story": "MI HISTORIA",
+        "science": "MI CIENCIA",
+        "status": "ESTADO ACTUAL"
+      }
+    },
     "infoLabels": {
+      "category": "CATEGORÍA",
       "description": "DESCRIPCIÓN",
       "diameter": "DIÁMETRO REAL",
+      "spectralType": "TIPO ESPECTRAL",
+      "surfaceTemperature": "TEMPERATURA SUPERFICIAL",
+      "mass": "MASA",
+      "composition": "COMPOSICIÓN",
       "distanceFromSun": "DISTANCIA MEDIA AL SOL",
       "distanceFromEarth": "DISTANCIA MEDIA A LA TIERRA",
       "distanceFromParent": "DISTANCIA ORBITAL MEDIA",
@@ -133,8 +173,8 @@
     "moon_triton_voyager": "Tritón, satélite de Neptuno",
     "equipment_apollo11": "El módulo lunar de Apollo 11 sobre la superficie de la Luna",
     "equipment_apollo11_astronaut": "Edwin Aldrin junto al módulo lunar durante Apollo 11",
-    "equipment_apollo15_lrv": "Vehículo Lunar Roving durante una simulación de actividad extravehicular en Nuevo México",
-    "equipment_apollo15_rover_eva": "El Lunar Roving Vehicle estacionado junto a Hadley Rille durante Apollo 15",
+    "equipment_apollo15_lrv": "Vehículo lunar de exploración (LRV) durante una simulación de actividad extravehicular en Nuevo México",
+    "equipment_apollo15_rover_eva": "El vehículo lunar de exploración (LRV) estacionado junto a Hadley Rille durante Apollo 15",
     "equipment_sojourner": "Sojourner y el terreno de Ares Vallis",
     "equipment_sojourner_terrain": "Mosaico en color del rover y el terreno de Pathfinder",
     "equipment_spirit": "Vista del tren de aterrizaje de Spirit en el sol 1990",

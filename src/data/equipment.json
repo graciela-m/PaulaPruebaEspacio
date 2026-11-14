@@ -236,6 +236,86 @@
       } },
       "gallery": [{ "assetId": "equipment_insight" }, { "assetId": "equipment_insight_last" }],
       "source": "https://science.nasa.gov/mission/insight/"
+    },
+    {
+      "id": "voyager-1",
+      "name": "Voyager 1",
+      "mission": "Voyager 1",
+      "launchYear": 1977,
+      "destination": "Espacio interestelar, más allá de la heliopausa",
+      "equipmentType": "Sonda interplanetaria",
+      "celestialBodyId": "sun",
+      "missionCategory": "deep-space",
+      "worldPosition": { "x": 4640, "y": 560 },
+      "operationalStatus": "La misión continúa; Voyager 1 transmite datos desde el espacio interestelar.",
+      "realLocation": {
+        "description": "Espacio interestelar, más allá de la heliopausa",
+        "coordinates": null
+      },
+      "interactionId": "voyager-1-story",
+      "scientificDescription": "Tras visitar Júpiter y Saturno, Voyager 1 cruzó la heliopausa en 2012 y se convirtió en la primera nave en explorar el espacio interestelar.",
+      "objective": "Estudiar los planetas gigantes exteriores y medir el entorno del espacio interestelar.",
+      "discoveries": "Sus sobrevuelos de Júpiter y Saturno revelaron detalles de sus atmósferas, anillos y satélites; sus instrumentos siguen midiendo partículas y campos en el espacio interestelar.",
+      "whyRemains": "La sonda sigue una trayectoria de escape del sistema solar y no tiene un sistema de retorno a la Tierra.",
+      "scientificLegacy": "Es la primera nave que cruzó la heliopausa y continúa ampliando las mediciones directas del medio interestelar.",
+      "description": "Sonda gemela de Voyager 2 que explora el espacio interestelar después de sus encuentros con Júpiter y Saturno.",
+      "mapPlacementNote": "Posición esquemática más allá de Neptuno; el mapa no está a escala.",
+      "translations": { "en": {
+        "name": "Voyager 1",
+        "mission": "Voyager 1",
+        "destination": "Interstellar space beyond the heliopause",
+        "equipmentType": "Interplanetary probe",
+        "operationalStatus": "The mission continues; Voyager 1 is transmitting data from interstellar space.",
+        "realLocation": { "description": "Interstellar space beyond the heliopause" },
+        "scientificDescription": "After visiting Jupiter and Saturn, Voyager 1 crossed the heliopause in 2012 and became the first spacecraft to explore interstellar space.",
+        "objective": "Study the outer giant planets and measure the environment of interstellar space.",
+        "discoveries": "Its Jupiter and Saturn flybys revealed details about their atmospheres, rings, and moons; its instruments continue to measure particles and fields in interstellar space.",
+        "whyRemains": "The probe is on an escape trajectory from the solar system and has no system for returning to Earth.",
+        "scientificLegacy": "It was the first spacecraft to cross the heliopause and continues to extend direct measurements of the interstellar medium.",
+        "description": "Voyager 2's twin probe, exploring interstellar space after its encounters with Jupiter and Saturn.",
+        "mapPlacementNote": "Schematic position beyond Neptune; the map is not to scale."
+      } },
+      "source": "https://science.nasa.gov/mission/voyager/"
+    },
+    {
+      "id": "voyager-2",
+      "name": "Voyager 2",
+      "mission": "Voyager 2",
+      "launchYear": 1977,
+      "destination": "Espacio interestelar, más allá de la heliopausa",
+      "equipmentType": "Sonda interplanetaria",
+      "celestialBodyId": "sun",
+      "missionCategory": "deep-space",
+      "worldPosition": { "x": 4640, "y": 1700 },
+      "operationalStatus": "La misión continúa; Voyager 2 transmite datos desde el espacio interestelar.",
+      "realLocation": {
+        "description": "Espacio interestelar, más allá de la heliopausa",
+        "coordinates": null
+      },
+      "interactionId": "voyager-2-story",
+      "scientificDescription": "Voyager 2 visitó Júpiter, Saturno, Urano y Neptuno; en 2018 cruzó la heliopausa y entró en el espacio interestelar.",
+      "objective": "Explorar los planetas gigantes y estudiar el viento solar y el medio interestelar.",
+      "discoveries": "Es la única nave que ha visitado Urano y Neptuno de cerca; sus observaciones transformaron el conocimiento de los cuatro planetas gigantes.",
+      "whyRemains": "La sonda sigue alejándose del Sol por una trayectoria de escape y no cuenta con un vehículo para regresar.",
+      "scientificLegacy": "Su recorrido por los cuatro planetas gigantes y sus mediciones más allá de la heliopausa constituyen una exploración sin precedentes.",
+      "description": "Sonda gemela de Voyager 1 y única nave que ha visitado de cerca los cuatro planetas gigantes.",
+      "mapPlacementNote": "Posición esquemática más allá de Neptuno; el mapa no está a escala.",
+      "translations": { "en": {
+        "name": "Voyager 2",
+        "mission": "Voyager 2",
+        "destination": "Interstellar space beyond the heliopause",
+        "equipmentType": "Interplanetary probe",
+        "operationalStatus": "The mission continues; Voyager 2 is transmitting data from interstellar space.",
+        "realLocation": { "description": "Interstellar space beyond the heliopause" },
+        "scientificDescription": "Voyager 2 visited Jupiter, Saturn, Uranus, and Neptune; in 2018 it crossed the heliopause and entered interstellar space.",
+        "objective": "Explore the giant planets and study the solar wind and interstellar medium.",
+        "discoveries": "It is the only spacecraft to have visited Uranus and Neptune up close; its observations transformed knowledge of all four giant planets.",
+        "whyRemains": "The probe continues moving away from the Sun on an escape trajectory and has no vehicle to return.",
+        "scientificLegacy": "Its grand tour of the four giant planets and measurements beyond the heliopause are an unprecedented exploration.",
+        "description": "Voyager 1's twin probe and the only spacecraft to have visited all four giant planets up close.",
+        "mapPlacementNote": "Schematic position beyond Neptune; the map is not to scale."
+      } },
+      "source": "https://science.nasa.gov/mission/voyager/"
     }
   ]
 }

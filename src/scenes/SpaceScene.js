@@ -121,7 +121,7 @@ export default class SpaceScene extends Phaser.Scene {
 
     container.add([background, label]);
     container.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, width, height),
+      new Phaser.Geom.Rectangle(-width / 2, -height / 2, width, height),
       Phaser.Geom.Rectangle.Contains,
     );
     container.on('pointerdown', () => this.setLanguage(language));
@@ -159,7 +159,6 @@ export default class SpaceScene extends Phaser.Scene {
     this.finalText.setText(translate(language, 'story.finalMessage'));
     this.updateLanguageSelection();
   }
-
   createStoryLayer() {
     const { palette, visual } = this;
     this.storyLayer = this.add.container(0, 0).setVisible(false).setAlpha(0);
