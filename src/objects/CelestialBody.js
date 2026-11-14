@@ -18,8 +18,12 @@ export default class CelestialBody {
     this.container.setDepth(1);
 
     const glowColor = colorValue(this.palette.electric);
-    const halo = scene.add.circle(0, 0, this.radius + 11, glowColor, 0.035);
-    this.container.add(halo);
+    if (data.type === 'star') {
+      this.addSolarCorona(scene, data.visual);
+    } else {
+      const halo = scene.add.circle(0, 0, this.radius + 11, glowColor, 0.035);
+      this.container.add(halo);
+    }
 
     if (data.visual.rings) this.addRings(scene, data.visual.rings);
 
@@ -31,7 +35,7 @@ export default class CelestialBody {
     this.container.add(ring);
 
     const imageAvailable = data.visual.imageId
-      && assets.images.some((image) => image.id === data.visual.imageId)
+      && assets.images.some((image) => image.id === data.visual.imageId && !image.mapArtifacts)
       && scene.textures.exists(data.visual.imageId);
 
     if (imageAvailable) {
@@ -54,6 +58,18 @@ export default class CelestialBody {
     }).setOrigin(0.5, 0);
     label.setWordWrapWidth(Math.max(128, this.radius * 3), true);
     this.container.add(label);
+  }
+
+  addSolarCorona(scene, visual) {
+    const coronaColor = colorValue(this.palette[visual.coronaColorKey]);
+    const flareColor = colorValue(this.palette.sunFlare);
+    [
+      { factor: visual.coronaRadiusFactor * 1.22, alpha: 0.035, color: coronaColor },
+      { factor: visual.coronaRadiusFactor * 1.12, alpha: 0.075, color: coronaColor },
+      { factor: visual.coronaRadiusFactor * 1.04, alpha: 0.14, color: flareColor },
+    ].forEach(({ factor, alpha, color }) => {
+      this.container.add(scene.add.circle(0, 0, this.radius * factor, color, alpha));
+    });
   }
 
   addRings(scene, ringData) {

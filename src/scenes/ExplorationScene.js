@@ -5,11 +5,13 @@ import gameConfig from '../data/game-config.json';
 import equipmentUrl from '../data/equipment.json?url&no-inline';
 import moonsUrl from '../data/moons.json?url&no-inline';
 import planetsUrl from '../data/planets.json?url&no-inline';
+import sunUrl from '../data/sun.json?url&no-inline';
 import spacecraftUrl from '../data/spacecraft.json?url&no-inline';
 import CelestialBody from '../objects/CelestialBody.js';
 import SpaceEquipment from '../objects/SpaceEquipment.js';
 import Spacecraft from '../objects/Spacecraft.js';
 import createStarfield from '../utils/createStarfield.js';
+import createActionButton from '../utils/createActionButton.js';
 import { getSavedLanguage, localizedAssetCaption, localizedField, translate } from '../utils/localization.js';
 
 export default class ExplorationScene extends Phaser.Scene {
@@ -27,6 +29,7 @@ export default class ExplorationScene extends Phaser.Scene {
     this.load.json('planetsData', planetsUrl);
     this.load.json('moonsData', moonsUrl);
     this.load.json('equipmentData', equipmentUrl);
+    this.load.json('sunData', sunUrl);
 
     assetsManifest.images.forEach((image) => {
       if (image.id && image.path) this.load.image(image.id, image.path);
@@ -40,6 +43,7 @@ export default class ExplorationScene extends Phaser.Scene {
     this.planetsData = this.cache.json.get('planetsData');
     this.moonsData = this.cache.json.get('moonsData');
     this.equipmentData = this.cache.json.get('equipmentData');
+    this.sunData = this.cache.json.get('sunData');
     this.language = getSavedLanguage();
     const requiredData = {
       explorationAssets: this.assets,
@@ -47,6 +51,7 @@ export default class ExplorationScene extends Phaser.Scene {
       planetsData: this.planetsData,
       moonsData: this.moonsData,
       equipmentData: this.equipmentData,
+      sunData: this.sunData,
     };
     const missingData = Object.entries(requiredData)
       .filter(([, value]) => value === undefined || value === null)
@@ -106,14 +111,12 @@ export default class ExplorationScene extends Phaser.Scene {
     const scale = gameConfig.world.coordinateSystem;
     const planetScale = scale.planetDiameter;
     const moonScale = scale.moonDiameter;
+    this.createSun();
 
     this.planetsData.objects.forEach((data) => {
-      // Square-root compression preserves orbital order while making inner and outer travel playable.
+      // Square-root compression maps mean solar distance to playable radial distance.
       const worldPosition = {
-        x: scale.planetDistance.sunReferenceX
-          + Math.sqrt(data.distanceFromSunKm / 1000000)
-            * scale.planetDistance.unitsPerSqrtMillionKm,
-        y: scale.planetDistance.sunReferenceY + data.visualLaneOffsetY,
+        ...this.getSolarMapPosition(data.distanceFromSunKm, data.visualAngleDegrees),
       };
       const radius = Phaser.Math.Clamp(
         planetScale.referenceVisualRadius
@@ -122,11 +125,13 @@ export default class ExplorationScene extends Phaser.Scene {
         planetScale.minimumVisualRadius,
         planetScale.maximumVisualRadius,
       );
+
       const body = new CelestialBody(this, {
         ...data,
         worldPosition,
         visual: { ...data.visual, radius },
       }, gameConfig, this.assets, this.language);
+
       this.celestialBodies.set(body.id, body);
       this.worldObjects.push(body.container);
     });
@@ -162,6 +167,37 @@ export default class ExplorationScene extends Phaser.Scene {
       this.celestialBodies.set(body.id, body);
       this.worldObjects.push(body.container);
     });
+  }
+
+  getSolarMapPosition(distanceFromSunKm, visualAngleDegrees) {
+    const distanceScale = gameConfig.world.coordinateSystem.planetDistance;
+    const radius = Math.sqrt(distanceFromSunKm / 1000000) * distanceScale.unitsPerSqrtMillionKm;
+    const angle = Phaser.Math.DegToRad(visualAngleDegrees);
+    return {
+      x: distanceScale.sunReferenceX + radius * Math.cos(angle),
+      y: distanceScale.sunReferenceY + radius * Math.sin(angle),
+    };
+  }
+
+  createSun() {
+    const visualScale = gameConfig.world.coordinateSystem.sunDiameter;
+    const radius = Phaser.Math.Clamp(
+      visualScale.referenceVisualRadius
+        * (this.sunData.diameterKm / visualScale.earthDiameterKm) ** visualScale.diameterExponent,
+      visualScale.minimumVisualRadius,
+      visualScale.maximumVisualRadius,
+    );
+    const distanceScale = gameConfig.world.coordinateSystem.planetDistance;
+    const sun = new CelestialBody(this, {
+      ...this.sunData,
+      worldPosition: {
+        x: distanceScale.sunReferenceX,
+        y: distanceScale.sunReferenceY,
+      },
+      visual: { ...this.sunData.visual, radius },
+    }, gameConfig, this.assets, this.language);
+    this.celestialBodies.set(sun.id, sun);
+    this.worldObjects.push(sun.container);
   }
 
   createEquipmentMarkers() {
@@ -261,6 +297,20 @@ export default class ExplorationScene extends Phaser.Scene {
     this.proximityPanel.add([this.proximityBackground, this.proximityName, this.proximityStatus]);
     this.hud.add([this.hudTitle, this.hudSubtitle, this.movementHint, this.proximityPanel]);
 
+    this.finishButton = createActionButton(this, {
+      width: 250,
+      height: 42,
+      text: translate(this.language, 'conclusion.finish'),
+      palette: gameConfig.palette,
+      visual: gameConfig.visual,
+      onPress: () => {
+        this.scene.launch('ConclusionScene');
+        this.scene.pause();
+      },
+    });
+    this.finishButton.label.setFontSize(12).setLetterSpacing(0);
+    this.hud.add(this.finishButton.container);
+
     this.createInfoPopup();
   }
 
@@ -359,6 +409,12 @@ export default class ExplorationScene extends Phaser.Scene {
   layoutHUD(gameSize) {
     this.hudSubtitle.setPosition(23, 43);
     this.movementHint.setPosition(22, gameSize.height - 18);
+    const finishWidth = Math.min(250, Math.max(130, gameSize.width * 0.48));
+    this.finishButton.setSize(finishWidth, 42);
+    this.finishButton.container.input.hitArea.setTo(0, 0, finishWidth, 42);
+    this.finishButton.label.setFontSize(finishWidth < 200 ? 9 : 12);
+    this.finishButton.container.setPosition(gameSize.width - finishWidth / 2 - 16, 36);
+    this.hudTitle.setFontSize(gameSize.width < 450 ? 13 : gameConfig.visual.hudTitleFontSize);
 
     const panelWidth = Math.min(gameConfig.visual.proximityPanelWidth, gameSize.width - 32);
     this.proximityBackground.setSize(panelWidth, gameConfig.visual.proximityPanelHeight);
@@ -691,6 +747,14 @@ export default class ExplorationScene extends Phaser.Scene {
       addLine('distanceFromParent', formatKilometers(data.distanceFromParentKm));
       addLine('discovery', localizedField(data, 'discoveryHistory', this.language));
       addLine('importance', localizedField(data, 'scientificImportance', this.language));
+      addLine('source', data.source);
+    } else if (data.type === 'star') {
+      addLine('description', localizedField(data, 'description', this.language));
+      addLine('diameter', formatKilometers(data.diameterKm));
+      addLine('distanceFromEarth', formatKilometers(data.distanceFromEarthKm));
+      addLine('characteristics', localizedField(data, 'characteristics', this.language)?.join(' '));
+      addLine('history', localizedField(data, 'observationHistory', this.language));
+      addLine('interestingFact', localizedField(data, 'interestingFact', this.language));
       addLine('source', data.source);
     } else {
       addLine('description', localizedField(data, 'description', this.language));

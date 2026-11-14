@@ -2,6 +2,47 @@
   "languagePrompt": "SELECT LANGUAGE",
   "languageOptions": { "es": "ESPAÑOL", "en": "ENGLISH" },
   "homeTagline": "Every mission leaves a story behind.",
+  "conclusion": {
+    "finish": "FINISH EXPLORATION",
+    "title": "THE LEGACY CONTINUES",
+    "thankYou": "Thank you for exploring",
+    "body": "Every space mission tells a story.\n\nSome spacecraft returned to Earth. Others remained on the Moon, on Mars, or continued traveling through space after fulfilling their purpose.\n\nBut none of them should be forgotten.\n\nEvery instrument, every vehicle, and every discovery represents the effort of people who dared to explore the unknown.\n\nAlthough many of these machines no longer work, their legacy lives on through the knowledge they gave us and the future generations who will continue exploring.\n\nSpace exploration does not end when a mission goes silent.\n\nOne chapter ends, but another begins.\n\nBecause the universe still holds millions of stories waiting to be discovered.",
+    "resume": "CONTINUE EXPLORING",
+    "home": "BACK TO HOME",
+    "epilogue": {
+      "pause": "PAUSE",
+      "resumeSequence": "RESUME",
+      "nextScene": "NEXT SCENE",
+      "skipToEnd": "SKIP TO END",
+      "scenes": [
+        {
+          "id": "silence",
+          "phrases": [
+            "Somewhere in the universe, a signal fell silent.",
+            "A mission reached the end of its journey.",
+            "But its story did not disappear."
+          ]
+        },
+        {
+          "id": "traces",
+          "phrases": [
+            "On the Moon, on Mars, and beyond, traces of our curiosity remain.",
+            "Every instrument helped us understand the universe a little better.",
+            "And every discovery opened the way for the next."
+          ]
+        },
+        {
+          "id": "legacy",
+          "phrases": [
+            "Missions may come to an end.",
+            "But knowledge remains.",
+            "The universe still holds stories waiting to be discovered.",
+            "And the next exploration could begin with you."
+          ]
+        }
+      ]
+    }
+  },
   "buttons": {
     "start": "START MISSION",
     "continue": "CONTINUE",
@@ -20,6 +61,7 @@
       "description": "DESCRIPTION",
       "diameter": "REAL DIAMETER",
       "distanceFromSun": "AVERAGE DISTANCE FROM THE SUN",
+      "distanceFromEarth": "AVERAGE DISTANCE FROM EARTH",
       "distanceFromParent": "AVERAGE ORBITAL DISTANCE",
       "parent": "ORBITS",
       "characteristics": "CHARACTERISTICS",

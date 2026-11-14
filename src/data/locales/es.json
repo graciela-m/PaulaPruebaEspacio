@@ -2,6 +2,47 @@
   "languagePrompt": "SELECCIONA TU IDIOMA",
   "languageOptions": { "es": "ESPAÑOL", "en": "ENGLISH" },
   "homeTagline": "Cada misión deja una historia.",
+  "conclusion": {
+    "finish": "FINALIZAR EXPLORACIÓN",
+    "title": "EL LEGADO CONTINÚA",
+    "thankYou": "Gracias por explorar",
+    "body": "Cada misión espacial cuenta una historia.\n\nAlgunas naves regresaron a la Tierra. Otras quedaron en la Luna, en Marte o viajando por el espacio, después de cumplir su propósito.\n\nPero ninguna fue olvidada.\n\nCada instrumento, cada vehículo y cada descubrimiento representa el esfuerzo de personas que se atrevieron a explorar lo desconocido.\n\nAunque muchas de estas máquinas ya no funcionan, su legado sigue vivo en los conocimientos que nos dejaron y en las futuras generaciones que continuarán explorando.\n\nLa exploración espacial no termina cuando una misión se apaga.\n\nTermina una etapa, pero comienza otra.\n\nPorque el universo todavía tiene millones de historias esperando ser descubiertas.",
+    "resume": "CONTINUAR EXPLORANDO",
+    "home": "VOLVER AL INICIO",
+    "epilogue": {
+      "pause": "PAUSAR",
+      "resumeSequence": "REANUDAR",
+      "nextScene": "SIGUIENTE ESCENA",
+      "skipToEnd": "OMITIR AL CIERRE",
+      "scenes": [
+        {
+          "id": "silence",
+          "phrases": [
+            "En algún lugar del universo, una señal dejó de escucharse.",
+            "Una misión terminó su viaje.",
+            "Pero su historia no desapareció."
+          ]
+        },
+        {
+          "id": "traces",
+          "phrases": [
+            "En la Luna, en Marte y más allá, quedaron las huellas de nuestra curiosidad.",
+            "Cada instrumento nos ayudó a comprender un poco más el universo.",
+            "Y cada descubrimiento abrió el camino para el siguiente."
+          ]
+        },
+        {
+          "id": "legacy",
+          "phrases": [
+            "Las misiones pueden terminar.",
+            "Pero el conocimiento permanece.",
+            "El universo todavía guarda historias esperando ser descubiertas.",
+            "Y la próxima exploración puede comenzar contigo."
+          ]
+        }
+      ]
+    }
+  },
   "buttons": {
     "start": "COMENZAR MISIÓN",
     "continue": "CONTINUAR",
@@ -20,6 +61,7 @@
       "description": "DESCRIPCIÓN",
       "diameter": "DIÁMETRO REAL",
       "distanceFromSun": "DISTANCIA MEDIA AL SOL",
+      "distanceFromEarth": "DISTANCIA MEDIA A LA TIERRA",
       "distanceFromParent": "DISTANCIA ORBITAL MEDIA",
       "parent": "PERTENECE A",
       "characteristics": "CARACTERÍSTICAS",
@@ -49,6 +91,8 @@
     }
   },
   "galleryCaptions": {
+    "sun_image_full_disk": "Disco solar completo captado por Solar Dynamics Observatory",
+    "sun_image_flare": "Erupción solar y prominencia captadas por SDO/AIA",
     "planet_mercury": "Primera imagen en color de Mercurio desde su órbita",
     "planet_mercury_surface": "Mosaico en color de la superficie de Mercurio de MESSENGER",
     "planet_venus": "Vista global de Venus centrada en 180 grados",
@@ -98,6 +142,14 @@
     "equipment_opportunity": "Opportunity junto a un objetivo rocoso de abrasión",
     "equipment_opportunity_orbit": "Opportunity en Murray Ridge vista desde la órbita",
     "equipment_insight": "Concepto artístico del módulo InSight en Marte",
-    "equipment_insight_last": "Una de las últimas imágenes enviadas por InSight"
+    "equipment_insight_last": "Una de las últimas imágenes enviadas por InSight",
+    "planet_earth_sprite": "Disco terrestre Blue Marble con atmósfera y nubes",
+    "planet_jupiter_sprite": "Júpiter con bandas atmosféricas y la Gran Mancha Roja",
+    "planet_uranus_sprite": "Urano visto por Voyager 2",
+    "planet_neptune_sprite": "Neptuno y sus variaciones atmosféricas",
+    "moon_earth_sprite": "La Luna llena con mares y cráteres",
+    "moon_europa_sprite": "Europa con su superficie helada y fracturada",
+    "moon_ganymede_sprite": "Ganímedes, su superficie helada y sus regiones oscuras",
+    "moon_callisto_sprite": "Calisto con su superficie antigua y craterizada"
   }
 }
