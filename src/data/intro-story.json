@@ -1,0 +1,38 @@
+{
+  "sceneId": "SpaceScene",
+  "destinationScene": "ExplorationScene",
+  "transitionMs": 560,
+  "finalMessage": "TU MISIÓN COMIENZA AHORA",
+  "buttons": {
+    "start": "COMENZAR MISIÓN",
+    "continue": "CONTINUAR",
+    "back": "VOLVER AL INICIO",
+    "startExploration": "INICIAR EXPLORACIÓN"
+  },
+  "messages": [
+    {
+      "id": "human-exploration",
+      "order": 1,
+      "sceneId": "SpaceScene",
+      "text": "Durante décadas, la humanidad ha explorado más allá de la Tierra."
+    },
+    {
+      "id": "machines-and-discovery",
+      "order": 2,
+      "sceneId": "SpaceScene",
+      "text": "En la Luna, Marte y otros rincones del espacio, quedaron máquinas que cambiaron nuestra forma de comprender el universo."
+    },
+    {
+      "id": "stories-remain",
+      "order": 3,
+      "sceneId": "SpaceScene",
+      "text": "Algunas dejaron de funcionar. Otras continúan su viaje. Pero sus historias siguen vivas."
+    },
+    {
+      "id": "the-mission",
+      "order": 4,
+      "sceneId": "SpaceScene",
+      "text": "Tu misión es descubrirlas."
+    }
+  ]
+}

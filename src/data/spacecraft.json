@@ -1,0 +1,28 @@
+{
+  "id": "legacy-explorer",
+  "spawnPosition": {
+    "x": 880,
+    "y": 1100
+  },
+  "movement": {
+    "maxSpeed": 280,
+    "acceleration": 820,
+    "drag": 0.88,
+    "rotationSpeed": 4.6,
+    "flameMinScale": 0.16,
+    "flameMaxScale": 1,
+    "thrustThreshold": 8
+  },
+  "appearance": {
+    "width": 76,
+    "height": 100,
+    "colors": {
+      "hull": "spacecraftHull",
+      "metal": "metal",
+      "cabin": "cabin",
+      "engine": "engine",
+      "engineHot": "engineHot",
+      "outline": "electric"
+    }
+  }
+}

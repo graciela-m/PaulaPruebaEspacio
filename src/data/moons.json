@@ -1,0 +1,312 @@
+{
+  "coordinateSystem": "local-parent-orbit-schematic",
+  "positionNote": "Los ángulos y radios visuales son una disposición estática de juego. distanceFromParentKm conserva la distancia orbital media física y no se usa como coordenada literal.",
+  "objects": [
+    {
+      "id": "moon",
+      "name": "Luna",
+      "type": "moon",
+      "parentId": "earth",
+      "diameterKm": 3474.8,
+      "distanceFromParentKm": 384400,
+      "visualAngleDegrees": 215,
+      "visual": { "imageId": "moon_earth_sprite", "colorKey": "moon", "accentColorKey": "metal", "surfaceStyle": "lunar-rock", "surfaceFeaturesColorKey": "moonCrater", "surfaceRimColorKey": "sphereHighlight", "radiusScale": 1,
+        "surfaceFeatures": [
+          { "type": "crater", "x": -0.36, "y": -0.08, "radius": 0.14 },
+          { "type": "crater", "x": 0.22, "y": -0.34, "radius": 0.1 },
+          { "type": "crater", "x": 0.38, "y": 0.12, "radius": 0.18 },
+          { "type": "crater", "x": -0.08, "y": 0.32, "radius": 0.12 },
+          { "type": "patch", "x": -0.3, "y": 0.12, "width": 0.38, "height": 0.16, "rotation": -20, "alpha": 0.24 }
+        ]
+      },
+      "description": "El único satélite natural permanente de la Tierra. Su superficie conserva cráteres y antiguas llanuras volcánicas.",
+      "discoveryHistory": "Conocida desde la prehistoria. Las observaciones telescópicas de Galileo en 1609–1610 revelaron montañas y cráteres; las misiones Apollo llevaron muestras a la Tierra.",
+      "scientificImportance": "Las muestras y observaciones lunares ayudan a reconstruir la historia temprana de la Tierra y del sistema Tierra-Luna.",
+      "translations": { "en": {
+        "name": "Moon",
+        "description": "Earth's only permanent natural satellite. Its surface preserves craters and ancient volcanic plains.",
+        "discoveryHistory": "Known since prehistory. Galileo's telescopic observations in 1609–1610 revealed mountains and craters; Apollo missions returned samples to Earth.",
+        "scientificImportance": "Lunar samples and observations help reconstruct the early history of Earth and the Earth-Moon system."
+      } },
+      "gallery": [{ "assetId": "moon_earth" }, { "assetId": "moon_lunar_panorama" }],
+      "source": "https://science.nasa.gov/moon/facts/"
+    },
+    {
+      "id": "phobos",
+      "name": "Fobos",
+      "type": "moon",
+      "parentId": "mars",
+      "diameterKm": 22.4,
+      "distanceFromParentKm": 9376,
+      "visualAngleDegrees": 220,
+      "visual": { "imageId": null, "colorKey": "mars", "accentColorKey": "marsDark", "surfaceStyle": "irregular-rock", "surfaceShape": [[-0.85,-0.12],[-0.58,-0.68],[-0.12,-0.82],[0.48,-0.62],[0.83,-0.16],[0.7,0.42],[0.24,0.78],[-0.36,0.7],[-0.82,0.32]], "surfaceFeaturesColorKey": "marsDark", "surfaceRimColorKey": "marsRim", "radiusScale": 1,
+        "surfaceFeatures": [
+          { "type": "crater", "x": -0.28, "y": -0.18, "radius": 0.2 },
+          { "type": "crater", "x": 0.34, "y": 0.24, "radius": 0.15 },
+          { "type": "patch", "x": 0.05, "y": -0.42, "width": 0.45, "height": 0.13, "rotation": 22, "alpha": 0.45 }
+        ]
+      },
+      "description": "El mayor de los dos satélites de Marte; es un cuerpo pequeño e irregular con una superficie muy craterizada.",
+      "discoveryHistory": "Asaph Hall descubrió Fobos en 1877 desde el Observatorio Naval de Estados Unidos.",
+      "scientificImportance": "Su órbita está decayendo lentamente y su estudio aporta pistas sobre el origen de los satélites marcianos.",
+      "translations": { "en": {
+        "name": "Phobos",
+        "description": "The larger of Mars's two moons, a small irregular body with a heavily cratered surface.",
+        "discoveryHistory": "Asaph Hall discovered Phobos in 1877 from the U.S. Naval Observatory.",
+        "scientificImportance": "Its orbit is slowly decaying, and studying it may reveal clues about the origin of the Martian moons."
+      } },
+      "gallery": [{ "assetId": "moon_phobos" }, { "assetId": "moon_phobos_odyssey" }],
+      "source": "https://science.nasa.gov/mars/moons/"
+    },
+    {
+      "id": "deimos",
+      "name": "Deimos",
+      "type": "moon",
+      "parentId": "mars",
+      "diameterKm": 12.4,
+      "distanceFromParentKm": 23463,
+      "visualAngleDegrees": 40,
+      "visual": { "imageId": null, "colorKey": "metal", "accentColorKey": "marsDark", "surfaceStyle": "irregular-rock", "surfaceShape": [[-0.82,-0.2],[-0.48,-0.7],[0.12,-0.86],[0.66,-0.48],[0.82,0.05],[0.55,0.62],[-0.04,0.82],[-0.68,0.52]], "surfaceFeaturesColorKey": "marsDark", "surfaceRimColorKey": "sphereHighlight", "radiusScale": 1,
+        "surfaceFeatures": [
+          { "type": "crater", "x": -0.25, "y": -0.2, "radius": 0.18 },
+          { "type": "crater", "x": 0.3, "y": 0.24, "radius": 0.12 },
+          { "type": "patch", "x": -0.04, "y": 0.5, "width": 0.42, "height": 0.12, "rotation": -15, "alpha": 0.42 }
+        ]
+      },
+      "description": "El menor y más distante de los dos satélites naturales conocidos de Marte.",
+      "discoveryHistory": "Asaph Hall descubrió Deimos en 1877, pocos días antes de hallar Fobos.",
+      "scientificImportance": "Su composición y forma pueden ayudar a determinar si los satélites marcianos son asteroides capturados o restos de impactos.",
+      "translations": { "en": {
+        "name": "Deimos",
+        "description": "The smaller and more distant of Mars's two known natural satellites.",
+        "discoveryHistory": "Asaph Hall discovered Deimos in 1877, a few days before finding Phobos.",
+        "scientificImportance": "Its composition and shape may help determine whether the Martian moons are captured asteroids or impact remnants."
+      } },
+      "gallery": [{ "assetId": "moon_deimos" }, { "assetId": "moon_deimos_phobos" }],
+      "source": "https://science.nasa.gov/mars/moons/"
+    },
+    {
+      "id": "io",
+      "name": "Ío",
+      "type": "moon",
+      "parentId": "jupiter",
+      "diameterKm": 3643,
+      "distanceFromParentKm": 421700,
+      "visualAngleDegrees": 20,
+      "visual": { "imageId": null, "colorKey": "venus", "accentColorKey": "engineHot", "surfaceStyle": "volcanic", "surfaceFeaturesColorKey": "marsDark", "surfaceRimColorKey": "venusCloud", "radiusScale": 1,
+        "surfaceFeatures": [
+          { "type": "patch", "x": -0.38, "y": -0.22, "width": 0.35, "height": 0.24, "rotation": 12, "alpha": 0.86 },
+          { "type": "patch", "x": 0.25, "y": -0.3, "width": 0.28, "height": 0.19, "rotation": -20, "alpha": 0.8 },
+          { "type": "storm", "x": 0.18, "y": 0.34, "width": 0.34, "height": 0.24, "rotation": -8, "alpha": 0.78 },
+          { "type": "crater", "x": -0.35, "y": 0.38, "radius": 0.12 }
+        ]
+      },
+      "description": "Un mundo rocoso con intensa actividad volcánica impulsada por las fuerzas de marea de Júpiter y sus lunas vecinas.",
+      "discoveryHistory": "Galileo Galilei observó Ío en enero de 1610; Voyager 1 confirmó volcanes activos en 1979.",
+      "scientificImportance": "Es el cuerpo con mayor actividad volcánica conocida del sistema solar y permite estudiar el calentamiento por mareas.",
+      "translations": { "en": {
+        "name": "Io",
+        "description": "A rocky world with intense volcanic activity driven by tidal forces from Jupiter and neighboring moons.",
+        "discoveryHistory": "Galileo Galilei observed Io in January 1610; Voyager 1 confirmed active volcanoes in 1979.",
+        "scientificImportance": "It is the most volcanically active body known in the solar system and helps scientists study tidal heating."
+      } },
+      "gallery": [{ "assetId": "moon_io" }, { "assetId": "moon_io_volcanoes" }],
+      "source": "https://science.nasa.gov/jupiter/moons/io/"
+    },
+    {
+      "id": "europa",
+      "name": "Europa",
+      "type": "moon",
+      "parentId": "jupiter",
+      "diameterKm": 3122,
+      "distanceFromParentKm": 671100,
+      "visualAngleDegrees": 100,
+      "visual": { "imageId": "moon_europa_sprite", "colorKey": "iceHighlight", "accentColorKey": "moon", "surfaceStyle": "icy-fractures", "surfaceFeaturesColorKey": "cabin", "radiusScale": 1,
+        "surfaceFeatures": [
+          { "type": "crack", "points": [[-0.72,-0.24],[-0.3,-0.08],[0.02,0.02],[0.3,0.24],[0.65,0.32]], "width": 0.035, "alpha": 0.74 },
+          { "type": "crack", "points": [[-0.12,-0.8],[-0.05,-0.43],[0.02,-0.08],[-0.14,0.24]], "width": 0.024, "alpha": 0.6 },
+          { "type": "crack", "points": [[0.35,-0.55],[0.18,-0.28],[0.35,0.02],[0.28,0.35]], "width": 0.02, "alpha": 0.55 }
+        ]
+      },
+      "description": "Una luna helada cuya superficie fracturada cubre probablemente un océano global de agua salada.",
+      "discoveryHistory": "Galileo Galilei la descubrió en 1610. Las imágenes de Voyager y Galileo revelaron una superficie joven y fracturada.",
+      "scientificImportance": "Su posible océano subterráneo la convierte en un objetivo clave para estudiar ambientes habitables fuera de la Tierra.",
+      "translations": { "en": {
+        "name": "Europa",
+        "description": "An icy moon whose fractured surface likely covers a global ocean of salty water.",
+        "discoveryHistory": "Galileo Galilei discovered Europa in 1610. Voyager and Galileo images revealed a young, fractured surface.",
+        "scientificImportance": "Its possible subsurface ocean makes Europa a key target for studying habitable environments beyond Earth."
+      } },
+      "gallery": [{ "assetId": "moon_europa" }, { "assetId": "moon_europa_cracks" }],
+      "source": "https://science.nasa.gov/jupiter/moons/europa/"
+    },
+    {
+      "id": "ganymede",
+      "name": "Ganímedes",
+      "type": "moon",
+      "parentId": "jupiter",
+      "diameterKm": 5268,
+      "distanceFromParentKm": 1070400,
+      "visualAngleDegrees": 180,
+      "visual": { "imageId": "moon_ganymede_sprite", "colorKey": "uranus", "accentColorKey": "moonCrater", "surfaceStyle": "icy-patches", "surfaceFeaturesColorKey": "iceHighlight", "surfaceRimColorKey": "moonCrater", "radiusScale": 1,
+        "surfaceFeatures": [
+          { "type": "patch", "x": -0.35, "y": -0.2, "width": 0.43, "height": 0.25, "rotation": -18, "alpha": 0.6 },
+          { "type": "patch", "x": 0.28, "y": 0.34, "width": 0.4, "height": 0.3, "rotation": 14, "alpha": 0.52 },
+          { "type": "crater", "x": 0.24, "y": -0.38, "radius": 0.12 }
+        ]
+      },
+      "description": "La luna más grande del sistema solar, con una superficie de hielo y roca y un campo magnético propio.",
+      "discoveryHistory": "Galileo Galilei la observó en 1610. La misión Galileo estudió el satélite de cerca entre 1995 y 2003.",
+      "scientificImportance": "Los datos de Galileo indican un océano salado bajo la corteza y una estructura interna diferenciada.",
+      "translations": { "en": {
+        "name": "Ganymede",
+        "description": "The largest moon in the solar system, with a surface of ice and rock and its own magnetic field.",
+        "discoveryHistory": "Galileo Galilei observed Ganymede in 1610. The Galileo mission studied the moon closely from 1995 to 2003.",
+        "scientificImportance": "Galileo data indicate a salty ocean beneath its crust and a differentiated internal structure."
+      } },
+      "gallery": [{ "assetId": "moon_ganymede" }, { "assetId": "moon_ganymede_interior" }],
+      "source": "https://science.nasa.gov/jupiter/moons/ganymede/"
+    },
+    {
+      "id": "callisto",
+      "name": "Calisto",
+      "type": "moon",
+      "parentId": "jupiter",
+      "diameterKm": 4821,
+      "distanceFromParentKm": 1882700,
+      "visualAngleDegrees": 260,
+      "visual": { "imageId": "moon_callisto_sprite", "colorKey": "metal", "accentColorKey": "moonCrater", "surfaceStyle": "ancient-craters", "surfaceFeaturesColorKey": "moonCrater", "surfaceRimColorKey": "sphereHighlight", "radiusScale": 1,
+        "surfaceFeatures": [
+          { "type": "crater", "x": -0.48, "y": -0.18, "radius": 0.18 },
+          { "type": "crater", "x": 0.16, "y": -0.38, "radius": 0.14 },
+          { "type": "crater", "x": 0.42, "y": 0.2, "radius": 0.2 },
+          { "type": "crater", "x": -0.18, "y": 0.42, "radius": 0.16 },
+          { "type": "crater", "x": -0.3, "y": 0.12, "radius": 0.09 }
+        ]
+      },
+      "description": "Una luna grande y muy craterizada que conserva una superficie antigua con pocos indicios de renovación geológica.",
+      "discoveryHistory": "Galileo Galilei la descubrió en 1610. Las observaciones de Voyager y Galileo caracterizaron su superficie intensamente craterizada.",
+      "scientificImportance": "Su interior puede albergar un océano salado y su superficie conserva un registro de impactos muy antiguo.",
+      "translations": { "en": {
+        "name": "Callisto",
+        "description": "A large, heavily cratered moon whose ancient surface shows few signs of geological renewal.",
+        "discoveryHistory": "Galileo Galilei discovered Callisto in 1610. Voyager and Galileo observations characterized its heavily cratered surface.",
+        "scientificImportance": "Its interior may contain a salty ocean, while its surface preserves a very ancient impact record."
+      } },
+      "gallery": [{ "assetId": "moon_callisto" }, { "assetId": "moon_callisto_false_color" }],
+      "source": "https://science.nasa.gov/jupiter/moons/callisto/"
+    },
+    {
+      "id": "titan",
+      "name": "Titán",
+      "type": "moon",
+      "parentId": "saturn",
+      "diameterKm": 5150,
+      "distanceFromParentKm": 1221870,
+      "visualAngleDegrees": 300,
+      "visual": { "imageId": null, "colorKey": "venus", "accentColorKey": "engineHot", "surfaceStyle": "hazy-atmosphere", "bands": [
+        { "y": -0.55, "thickness": 0.23, "colorKey": "venusCloud", "alpha": 0.55, "wave": 0.035 },
+        { "y": -0.12, "thickness": 0.2, "colorKey": "venusCloudShade", "alpha": 0.24, "wave": 0.04 },
+        { "y": 0.32, "thickness": 0.28, "colorKey": "venusCloud", "alpha": 0.42, "wave": 0.035 }
+      ], "radiusScale": 1 },
+      "description": "La mayor luna de Saturno, con una atmósfera densa y lagos y mares de metano y etano líquidos en la superficie.",
+      "discoveryHistory": "Christiaan Huygens descubrió Titán en 1655. La sonda Huygens descendió en su superficie en 2005 como parte de Cassini-Huygens.",
+      "scientificImportance": "Su química orgánica y ciclo de líquidos ofrecen un laboratorio natural para estudiar química prebiótica.",
+      "translations": { "en": {
+        "name": "Titan",
+        "description": "Saturn's largest moon, with a dense atmosphere and surface lakes and seas of liquid methane and ethane.",
+        "discoveryHistory": "Christiaan Huygens discovered Titan in 1655. The Huygens probe landed on its surface in 2005 as part of Cassini-Huygens.",
+        "scientificImportance": "Its organic chemistry and liquid cycle provide a natural laboratory for studying prebiotic chemistry."
+      } },
+      "gallery": [{ "assetId": "moon_titan" }, { "assetId": "moon_titan_flyby" }],
+      "source": "https://science.nasa.gov/saturn/moons/titan/"
+    },
+    {
+      "id": "enceladus",
+      "name": "Encélado",
+      "type": "moon",
+      "parentId": "saturn",
+      "diameterKm": 504.2,
+      "distanceFromParentKm": 237948,
+      "visualAngleDegrees": 80,
+      "visual": { "imageId": null, "colorKey": "iceHighlight", "accentColorKey": "cabin", "surfaceStyle": "icy-geysers", "surfaceFeaturesColorKey": "uranusBand", "surfaceRimColorKey": "sphereHighlight", "radiusScale": 1,
+        "surfaceFeatures": [
+          { "type": "crack", "points": [[-0.44,0.68],[-0.3,0.4],[-0.16,0.22]], "width": 0.025, "alpha": 0.55 },
+          { "type": "crack", "points": [[-0.12,0.8],[0.04,0.53],[0.18,0.36]], "width": 0.03, "alpha": 0.7 },
+          { "type": "crack", "points": [[0.22,0.72],[0.34,0.48],[0.48,0.3]], "width": 0.022, "alpha": 0.58 },
+          { "type": "patch", "x": -0.3, "y": -0.35, "width": 0.38, "height": 0.19, "rotation": -12, "alpha": 0.38 }
+        ]
+      },
+      "description": "Una pequeña luna helada con géiseres que expulsan vapor de agua y partículas desde fracturas cerca del polo sur.",
+      "discoveryHistory": "William Herschel descubrió Encélado en 1789. Cassini detectó sus penachos y los muestreó durante sobrevuelos.",
+      "scientificImportance": "Los penachos contienen materiales de un océano subsuperficial y permiten estudiar ese entorno sin perforar el hielo.",
+      "translations": { "en": {
+        "name": "Enceladus",
+        "description": "A small icy moon with geysers that eject water vapor and particles from fractures near its south pole.",
+        "discoveryHistory": "William Herschel discovered Enceladus in 1789. Cassini detected its plumes and sampled them during flybys.",
+        "scientificImportance": "The plumes contain material from a subsurface ocean, allowing scientists to study it without drilling through the ice."
+      } },
+      "gallery": [{ "assetId": "moon_enceladus" }, { "assetId": "moon_enceladus_map" }],
+      "source": "https://science.nasa.gov/saturn/moons/enceladus/"
+    },
+    {
+      "id": "titania",
+      "name": "Titania",
+      "type": "moon",
+      "parentId": "uranus",
+      "diameterKm": 1577.8,
+      "distanceFromParentKm": 435910,
+      "visualAngleDegrees": 135,
+      "visual": { "imageId": null, "colorKey": "metal", "accentColorKey": "mars", "surfaceStyle": "fractured-ice", "surfaceFeaturesColorKey": "moonCrater", "surfaceRimColorKey": "sphereHighlight", "radiusScale": 1,
+        "surfaceFeatures": [
+          { "type": "crater", "x": -0.32, "y": -0.34, "radius": 0.16 },
+          { "type": "crater", "x": 0.33, "y": 0.2, "radius": 0.13 },
+          { "type": "crack", "points": [[-0.5,0.15],[-0.2,0.04],[0.12,0.2],[0.48,0.12]], "width": 0.025, "alpha": 0.62 },
+          { "type": "patch", "x": 0.08, "y": -0.42, "width": 0.46, "height": 0.16, "rotation": 14, "alpha": 0.38 }
+        ]
+      },
+      "description": "La mayor luna de Urano, un cuerpo helado con grandes cañones y señales de actividad geológica antigua.",
+      "discoveryHistory": "William Herschel descubrió Titania en 1787. Voyager 2 obtuvo las únicas imágenes cercanas durante su paso por Urano en 1986.",
+      "scientificImportance": "Sus fracturas y cañones ofrecen indicios de expansión y evolución térmica del interior de la luna.",
+      "translations": { "en": {
+        "name": "Titania",
+        "description": "Uranus's largest moon, an icy body with large canyons and signs of ancient geological activity.",
+        "discoveryHistory": "William Herschel discovered Titania in 1787. Voyager 2 obtained the only close-up images during its Uranus flyby in 1986.",
+        "scientificImportance": "Its fractures and canyons provide clues to expansion and the moon's internal thermal evolution."
+      } },
+      "gallery": [{ "assetId": "moon_titania" }, { "assetId": "moon_titania_composite" }],
+      "source": "https://science.nasa.gov/uranus/moons/titania/"
+    },
+    {
+      "id": "triton",
+      "name": "Tritón",
+      "type": "moon",
+      "parentId": "neptune",
+      "diameterKm": 2706.8,
+      "distanceFromParentKm": 354800,
+      "visualAngleDegrees": 215,
+      "visual": { "imageId": null, "colorKey": "uranus", "accentColorKey": "cabin", "surfaceStyle": "icy-geysers", "surfaceFeaturesColorKey": "iceCrack", "surfaceRimColorKey": "iceHighlight", "radiusScale": 1,
+        "bands": [
+          { "y": -0.62, "thickness": 0.18, "colorKey": "iceHighlight", "alpha": 0.28, "wave": 0.025 },
+          { "y": 0.58, "thickness": 0.15, "colorKey": "iceHighlight", "alpha": 0.24, "wave": 0.02 }
+        ],
+        "surfaceFeatures": [
+          { "type": "patch", "x": -0.28, "y": -0.25, "width": 0.4, "height": 0.19, "rotation": -20, "alpha": 0.3 },
+          { "type": "crack", "points": [[-0.44,0.68],[-0.22,0.42],[0.02,0.24],[0.3,0.12]], "width": 0.024, "alpha": 0.68 },
+          { "type": "crater", "x": 0.34, "y": -0.34, "radius": 0.12 }
+        ]
+      },
+      "description": "La luna mayor de Neptuno, con una órbita retrógrada y una superficie helada que presenta géiseres de nitrógeno observados por Voyager 2.",
+      "discoveryHistory": "William Lassell descubrió Tritón en 1846, pocas semanas después del descubrimiento de Neptuno.",
+      "scientificImportance": "Su órbita retrógrada y propiedades sugieren que pudo ser capturado por Neptuno; es un objetivo de interés para futuras misiones.",
+      "translations": { "en": {
+        "name": "Triton",
+        "description": "Neptune's largest moon, with a retrograde orbit and an icy surface where Voyager 2 observed nitrogen geysers.",
+        "discoveryHistory": "William Lassell discovered Triton in 1846, a few weeks after Neptune was discovered.",
+        "scientificImportance": "Its retrograde orbit and properties suggest it may have been captured by Neptune; it is a target of interest for future missions."
+      } },
+      "gallery": [{ "assetId": "moon_triton" }, { "assetId": "moon_triton_voyager" }],
+      "source": "https://science.nasa.gov/neptune/moons/triton/"
+    }
+  ]
+}

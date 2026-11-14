@@ -1,0 +1,91 @@
+{
+  "languagePrompt": "SELECT LANGUAGE",
+  "languageOptions": { "es": "ESPAÑOL", "en": "ENGLISH" },
+  "homeTagline": "Every mission leaves a story behind.",
+  "buttons": {
+    "start": "START MISSION",
+    "continue": "CONTINUE",
+    "back": "BACK TO START",
+    "startExploration": "START EXPLORATION",
+    "close": "CLOSE"
+  },
+  "exploration": {
+    "subtitle": "Space exploration",
+    "movementHint": "WASD / Arrows: move spacecraft · F: flashlight",
+    "flashlightOn": "FLASHLIGHT: ON",
+    "flashlightOff": "FLASHLIGHT: OFF · F",
+    "zoomLabel": "Zoom",
+    "discoveredLabel": "Object discovered",
+    "interactHint": "Press E to explore",
+    "surfaceMode": {
+      "enterHint": "Press Q to explore surface · E for info",
+      "exitHint": "WASD / Arrows: fly · Q: return to space",
+      "missionHint": "Press E to explore · Q to return to space",
+      "objectiveCount": "Equipment found: {found}/{total}"
+    },
+    "surfaceMarkerLabel": "Schematic surface location",
+    "unavailableDataLabel": "Exact location unavailable",
+    "timeline": {
+      "title": "TIMELINE",
+      "all": "SEE ALL",
+      "activeMissionSingular": "active mission",
+      "activeMissionPlural": "active missions",
+      "milestones": {
+        "1969": "1969: Apollo 11's lunar module reaches the Moon.",
+        "1971": "1971: The Apollo 15 lunar rover expands surface exploration.",
+        "1997": "1997: Sojourner becomes the first rover to operate on Mars.",
+        "2004": "2004: Spirit and Opportunity begin exploring Mars.",
+        "2018": "2018: InSight reaches Mars to study its interior."
+      }
+    },
+    "archive": {
+      "title": "LEGACY ARCHIVE",
+      "duration": "Mission duration",
+      "naturalWorld": "Natural world",
+      "naturalSatellite": "Natural satellite",
+      "starStatus": "Main-sequence star",
+      "noMission": "Not applicable: celestial body without a surface mission.",
+      "tabs": {
+        "story": "MY STORY",
+        "science": "MY SCIENCE",
+        "status": "CURRENT STATUS"
+      }
+    },
+    "infoLabels": {
+      "category": "CATEGORY",
+      "description": "DESCRIPTION",
+      "diameter": "REAL DIAMETER",
+      "spectralType": "SPECTRAL TYPE",
+      "surfaceTemperature": "SURFACE TEMPERATURE",
+      "mass": "MASS",
+      "composition": "COMPOSITION",
+      "distanceFromSun": "AVERAGE DISTANCE FROM THE SUN",
+      "distanceFromParent": "AVERAGE ORBITAL DISTANCE",
+      "parent": "ORBITS",
+      "characteristics": "CHARACTERISTICS",
+      "history": "OBSERVATION HISTORY",
+      "discovery": "DISCOVERY",
+      "importance": "SCIENTIFIC IMPORTANCE",
+      "interestingFact": "DID YOU KNOW?",
+      "mission": "MISSION",
+      "launchYear": "LAUNCH YEAR",
+      "destination": "DESTINATION",
+      "objective": "SCIENCE OBJECTIVE",
+      "discoveries": "DISCOVERIES",
+      "status": "CURRENT STATUS",
+      "location": "LOCATION",
+      "whyRemains": "WHY IT REMAINS",
+      "legacy": "SCIENTIFIC LEGACY",
+      "source": "SOURCE"
+    }
+  },
+  "story": {
+    "finalMessage": "YOUR MISSION STARTS NOW",
+    "messages": {
+      "human-exploration": "For decades, humanity has explored beyond Earth.",
+      "machines-and-discovery": "On the Moon, Mars, and other corners of space, machines were left behind that changed how we understand the universe.",
+      "stories-remain": "Some stopped working. Others continue their journey. But their stories are still alive.",
+      "the-mission": "Your mission is to discover them."
+    }
+  }
+}

@@ -1,0 +1,326 @@
+{
+  "coordinateSystem": "interplanetary-schematic",
+  "positionNote": "Las coordenadas se calculan desde la distancia media al Sol usando la compresión documentada en game-config.json; no son posiciones orbitales actuales.",
+  "objects": [
+    {
+      "id": "sun",
+      "name": "Sol",
+      "type": "star",
+      "diameterKm": 1392700,
+      "distanceFromSunKm": 0,
+      "visualLaneOffsetY": 0,
+      "visual": { "radius": 180, "stellar": true },
+      "description": "La estrella del sistema solar, una esfera de plasma cuya gravedad mantiene a los planetas en órbita.",
+      "spectralType": "G2V",
+      "surfaceTemperatureK": 5772,
+      "mass": "1.9885 × 10^30 kg",
+      "composition": ["≈ 73% hidrógeno", "≈ 25% helio", "≈ 2% elementos más pesados"],
+      "translations": { "en": {
+        "name": "Sun",
+        "description": "The star at the center of the solar system, a sphere of plasma whose gravity keeps the planets in orbit.",
+        "mass": "1.9885 × 10^30 kg",
+        "composition": ["≈ 73% hydrogen", "≈ 25% helium", "≈ 2% heavier elements"]
+      } },
+      "source": "https://science.nasa.gov/sun/facts/"
+    },
+    {
+      "id": "mercury",
+      "name": "Mercurio",
+      "type": "planet",
+      "diameterKm": 4879,
+      "distanceFromSunKm": 57909050,
+      "distanceFromEarthKm": 91700000,
+      "visualLaneOffsetY": -230,
+      "visual": {
+        "imageId": null,
+        "colorKey": "mercury",
+        "radiusScale": 1,
+        "surfaceStyle": "cratered-rock",
+        "surfaceRimColorKey": "mercuryRim",
+        "surfaceFeaturesColorKey": "mercuryCrater",
+        "surfaceFeatures": [
+          { "type": "crater", "x": -0.46, "y": -0.34, "radius": 0.16 },
+          { "type": "crater", "x": 0.36, "y": -0.28, "radius": 0.11 },
+          { "type": "crater", "x": -0.12, "y": 0.08, "radius": 0.22 },
+          { "type": "crater", "x": 0.48, "y": 0.38, "radius": 0.12 },
+          { "type": "crater", "x": -0.47, "y": 0.5, "radius": 0.09 }
+        ]
+      },
+      "description": "El planeta más pequeño y cercano al Sol. Su superficie rocosa conserva huellas de impactos muy antiguos.",
+      "observationHistory": "Mercurio se conoce desde la antigüedad por ser visible a simple vista. Mariner 10 lo sobrevoló en 1974 y 1975; MESSENGER orbitó el planeta entre 2011 y 2015.",
+      "characteristics": ["Un año dura 88 días terrestres.", "Tiene una gran variación de temperatura entre el día y la noche."],
+      "interestingFact": "A pesar de estar cerca del Sol, se ha encontrado hielo de agua en cráteres polares permanentemente en sombra.",
+      "translations": { "en": {
+        "name": "Mercury",
+        "description": "The smallest planet and the closest to the Sun. Its rocky surface preserves evidence of very ancient impacts.",
+        "observationHistory": "Mercury has been known since antiquity because it is visible to the naked eye. Mariner 10 flew past it in 1974 and 1975; MESSENGER orbited the planet from 2011 to 2015.",
+        "characteristics": ["A year lasts 88 Earth days.", "Its surface experiences a large temperature swing between day and night."],
+        "interestingFact": "Despite its proximity to the Sun, water ice has been found in permanently shadowed polar craters."
+      } },
+      "gallery": [{ "assetId": "planet_mercury" }, { "assetId": "planet_mercury_surface" }],
+      "source": "https://science.nasa.gov/mercury/"
+    },
+    {
+      "id": "venus",
+      "name": "Venus",
+      "type": "planet",
+      "diameterKm": 12104,
+      "distanceFromSunKm": 108208000,
+      "distanceFromEarthKm": 41400000,
+      "visualLaneOffsetY": -300,
+      "visual": {
+        "imageId": null,
+        "colorKey": "venus",
+        "radiusScale": 1,
+        "surfaceStyle": "clouded-atmosphere",
+        "bands": [
+          { "y": -0.62, "thickness": 0.18, "colorKey": "venusCloud", "alpha": 0.48, "wave": 0.04 },
+          { "y": -0.32, "thickness": 0.13, "colorKey": "venusCloudShade", "alpha": 0.28, "wave": 0.05 },
+          { "y": 0.04, "thickness": 0.2, "colorKey": "venusCloud", "alpha": 0.4, "wave": 0.06 },
+          { "y": 0.39, "thickness": 0.15, "colorKey": "venusCloudShade", "alpha": 0.24, "wave": 0.05 },
+          { "y": 0.68, "thickness": 0.13, "colorKey": "venusCloud", "alpha": 0.42, "wave": 0.03 }
+        ]
+      },
+      "description": "Un mundo rocoso cubierto por una densa atmósfera de dióxido de carbono y nubes de ácido sulfúrico.",
+      "observationHistory": "Venus ha sido observado desde la antigüedad. En 1610 Galileo observó sus fases; la misión Magellan cartografió gran parte de su superficie con radar en la década de 1990.",
+      "characteristics": ["Su superficie es extremadamente caliente por un intenso efecto invernadero.", "Rota lentamente en sentido retrógrado."],
+      "interestingFact": "Un día sidéreo en Venus dura más que su año, que equivale a unos 225 días terrestres.",
+      "translations": { "en": {
+        "name": "Venus",
+        "description": "A rocky world wrapped in a dense carbon-dioxide atmosphere and clouds of sulfuric acid.",
+        "observationHistory": "Venus has been observed since antiquity. Galileo observed its phases in 1610; the Magellan mission mapped much of its surface with radar in the 1990s.",
+        "characteristics": ["Its surface is extremely hot because of a strong greenhouse effect.", "It rotates slowly in a retrograde direction."],
+        "interestingFact": "A sidereal day on Venus is longer than its year, which lasts about 225 Earth days."
+      } },
+      "gallery": [{ "assetId": "planet_venus" }, { "assetId": "planet_venus_global" }],
+      "source": "https://science.nasa.gov/venus/"
+    },
+    {
+      "id": "earth",
+      "name": "Tierra",
+      "type": "planet",
+      "diameterKm": 12742,
+      "distanceFromSunKm": 149597870,
+      "distanceFromEarthKm": 0,
+      "visualLaneOffsetY": 30,
+      "visual": {
+        "imageId": "planet_earth_sprite",
+        "colorKey": "earth",
+        "accentColorKey": "earthLand",
+        "radiusScale": 1,
+        "surfaceStyle": "terrestrial",
+        "surfaceFeaturesColorKey": "earthLand",
+        "cloudColorKey": "sphereHighlight",
+        "surfaceFeatures": [
+          { "type": "patch", "x": -0.34, "y": -0.32, "width": 0.34, "height": 0.27, "rotation": -20, "alpha": 0.95 },
+          { "type": "patch", "x": 0.12, "y": -0.22, "width": 0.28, "height": 0.39, "rotation": 18, "alpha": 0.92 },
+          { "type": "patch", "x": 0.38, "y": 0.34, "width": 0.32, "height": 0.2, "rotation": -12, "alpha": 0.9 },
+          { "type": "patch", "x": -0.3, "y": 0.35, "width": 0.2, "height": 0.3, "rotation": 24, "alpha": 0.88 },
+          { "type": "cloud", "x": -0.18, "y": -0.47, "width": 0.55, "height": 0.07, "rotation": -18, "alpha": 0.56 },
+          { "type": "cloud", "x": 0.24, "y": 0.02, "width": 0.63, "height": 0.08, "rotation": -25, "alpha": 0.48 },
+          { "type": "cloud", "x": -0.2, "y": 0.55, "width": 0.42, "height": 0.06, "rotation": -10, "alpha": 0.52 }
+        ]
+      },
+      "description": "Un planeta rocoso con agua líquida estable en su superficie y la única vida conocida hasta ahora.",
+      "observationHistory": "La Tierra fue reconocida como planeta al desarrollarse los modelos heliocéntricos. Desde la órbita, satélites y astronautas observan sus sistemas terrestres y su clima global.",
+      "characteristics": ["Su atmósfera protege la superficie y participa en el ciclo del agua.", "Su único satélite natural permanente es la Luna."],
+      "interestingFact": "Los océanos cubren cerca del 71 % de la superficie terrestre.",
+      "translations": { "en": {
+        "name": "Earth",
+        "description": "A rocky planet with stable liquid water on its surface and the only life known so far.",
+        "observationHistory": "Earth was recognized as a planet as heliocentric models developed. From orbit, satellites and astronauts observe its land systems and global climate.",
+        "characteristics": ["Its atmosphere protects the surface and participates in the water cycle.", "Its one permanent natural satellite is the Moon."],
+        "interestingFact": "Oceans cover about 71 percent of Earth's surface."
+      } },
+      "gallery": [{ "assetId": "planet_earth" }, { "assetId": "planet_earth_east" }],
+      "source": "https://science.nasa.gov/earth/facts/"
+    },
+    {
+      "id": "mars",
+      "name": "Marte",
+      "type": "planet",
+      "diameterKm": 6779,
+      "distanceFromSunKm": 227939200,
+      "distanceFromEarthKm": 225000000,
+      "visualLaneOffsetY": 180,
+      "visual": {
+        "imageId": null,
+        "colorKey": "mars",
+        "accentColorKey": "engineHot",
+        "radiusScale": 1,
+        "surfaceStyle": "rusted-rock",
+        "surfaceFeaturesColorKey": "marsDark",
+        "surfaceRimColorKey": "marsRim",
+        "surfaceFeatures": [
+          { "type": "patch", "x": -0.3, "y": -0.18, "width": 0.42, "height": 0.2, "rotation": -20, "alpha": 0.65 },
+          { "type": "patch", "x": 0.29, "y": 0.34, "width": 0.37, "height": 0.16, "rotation": 20, "alpha": 0.72 },
+          { "type": "crater", "x": 0.31, "y": -0.31, "radius": 0.16 },
+          { "type": "crater", "x": -0.43, "y": 0.39, "radius": 0.11 },
+          { "type": "crater", "x": 0.04, "y": 0.08, "radius": 0.08 }
+        ]
+      },
+      "description": "Un planeta rocoso frío con volcanes, cañones y señales geológicas de antiguos ambientes con agua líquida.",
+      "observationHistory": "Marte se conoce desde la antigüedad. Mariner 4 realizó el primer sobrevuelo exitoso en 1965; orbitadores, módulos de aterrizaje y rovers han estudiado su geología desde entonces.",
+      "characteristics": ["Tiene dos pequeñas lunas, Fobos y Deimos.", "Su atmósfera delgada está compuesta principalmente por dióxido de carbono."],
+      "interestingFact": "Olympus Mons es uno de los volcanes más grandes conocidos del sistema solar.",
+      "translations": { "en": {
+        "name": "Mars",
+        "description": "A cold rocky planet with volcanoes, canyons, and geological evidence of ancient environments with liquid water.",
+        "observationHistory": "Mars has been known since antiquity. Mariner 4 made the first successful flyby in 1965; orbiters, landers, and rovers have studied its geology ever since.",
+        "characteristics": ["It has two small moons, Phobos and Deimos.", "Its thin atmosphere is made mostly of carbon dioxide."],
+        "interestingFact": "Olympus Mons is one of the largest known volcanoes in the solar system."
+      } },
+      "gallery": [{ "assetId": "planet_mars" }, { "assetId": "planet_mars_pathfinder" }],
+      "source": "https://science.nasa.gov/mars/facts/"
+    },
+    {
+      "id": "jupiter",
+      "name": "Júpiter",
+      "type": "planet",
+      "diameterKm": 139820,
+      "distanceFromSunKm": 778570000,
+      "distanceFromEarthKm": 628730000,
+      "visualLaneOffsetY": -130,
+      "visual": {
+        "imageId": "planet_jupiter_sprite",
+        "colorKey": "jupiter",
+        "radiusScale": 1,
+        "surfaceStyle": "gas-bands",
+        "bands": [
+          { "y": -0.78, "thickness": 0.12, "colorKey": "jupiterDarkBand", "alpha": 0.62, "wave": 0.025 },
+          { "y": -0.57, "thickness": 0.18, "colorKey": "jupiterLightBand", "alpha": 0.85, "wave": 0.04 },
+          { "y": -0.3, "thickness": 0.2, "colorKey": "jupiterDarkBand", "alpha": 0.7, "wave": 0.035 },
+          { "y": 0.02, "thickness": 0.18, "colorKey": "jupiterLightBand", "alpha": 0.8, "wave": 0.05 },
+          { "y": 0.29, "thickness": 0.22, "colorKey": "jupiterDarkBand", "alpha": 0.68, "wave": 0.04 },
+          { "y": 0.59, "thickness": 0.18, "colorKey": "jupiterLightBand", "alpha": 0.82, "wave": 0.03 },
+          { "y": 0.82, "thickness": 0.1, "colorKey": "jupiterDarkBand", "alpha": 0.6, "wave": 0.02 }
+        ],
+        "surfaceFeaturesColorKey": "jupiterStorm",
+        "surfaceFeatures": [
+          { "type": "storm", "x": 0.38, "y": 0.35, "width": 0.32, "height": 0.2, "rotation": -8, "alpha": 0.9 }
+        ]
+      },
+      "description": "El planeta más grande del sistema solar, un gigante gaseoso compuesto sobre todo por hidrógeno y helio.",
+      "observationHistory": "Júpiter se observa desde la antigüedad. En 1610 Galileo Galilei registró cuatro lunas grandes que hoy llevan su nombre; misiones como Juno estudian su interior y atmósfera.",
+      "characteristics": ["Posee bandas nubosas y tormentas de larga duración.", "Su campo magnético es el más intenso entre los planetas."],
+      "interestingFact": "La Gran Mancha Roja es una tormenta gigante observada durante siglos.",
+      "translations": { "en": {
+        "name": "Jupiter",
+        "description": "The largest planet in the solar system, a gas giant composed mostly of hydrogen and helium.",
+        "observationHistory": "Jupiter has been observed since antiquity. In 1610 Galileo Galilei recorded four large moons now named after him; missions such as Juno study the planet's interior and atmosphere.",
+        "characteristics": ["It has cloud bands and long-lived storms.", "It has the strongest magnetic field of any planet."],
+        "interestingFact": "The Great Red Spot is a giant storm observed for centuries."
+      } },
+      "gallery": [{ "assetId": "planet_jupiter" }, { "assetId": "planet_jupiter_crescent" }],
+      "source": "https://science.nasa.gov/jupiter/facts/"
+    },
+    {
+      "id": "saturn",
+      "name": "Saturno",
+      "type": "planet",
+      "diameterKm": 116460,
+      "distanceFromSunKm": 1433529000,
+      "distanceFromEarthKm": 1275000000,
+      "visualLaneOffsetY": 200,
+      "visual": {
+        "imageId": null,
+        "colorKey": "saturn",
+        "radiusScale": 1,
+        "surfaceStyle": "gas-bands",
+        "bands": [
+          { "y": -0.67, "thickness": 0.13, "colorKey": "saturnBand", "alpha": 0.42, "wave": 0.025 },
+          { "y": -0.39, "thickness": 0.16, "colorKey": "sphereHighlight", "alpha": 0.36, "wave": 0.035 },
+          { "y": -0.08, "thickness": 0.14, "colorKey": "saturnBand", "alpha": 0.38, "wave": 0.025 },
+          { "y": 0.22, "thickness": 0.2, "colorKey": "sphereHighlight", "alpha": 0.34, "wave": 0.04 },
+          { "y": 0.57, "thickness": 0.14, "colorKey": "saturnBand", "alpha": 0.4, "wave": 0.025 }
+        ],
+        "rings": { "colorKey": "saturnRing", "widthFactor": 0.7, "heightFactor": 0.52, "angleDegrees": -18 }
+      },
+      "description": "Un gigante gaseoso rodeado por un amplio sistema de anillos formado principalmente por partículas de hielo y roca.",
+      "observationHistory": "Saturno se conoce desde la antigüedad. Galileo observó sus anillos en 1610 sin poder resolver su forma; Christiaan Huygens explicó su naturaleza anular en 1655. Cassini lo estudió desde la órbita entre 2004 y 2017.",
+      "characteristics": ["Tiene numerosas lunas, entre ellas Titán y Encélado.", "Su densidad media es menor que la del agua."],
+      "interestingFact": "Encélado expulsa géiseres que revelan un océano bajo su corteza helada.",
+      "translations": { "en": {
+        "name": "Saturn",
+        "description": "A gas giant surrounded by a broad ring system made mostly of ice and rock particles.",
+        "observationHistory": "Saturn has been known since antiquity. Galileo observed its rings in 1610 but could not resolve their shape; Christiaan Huygens explained their ring-like nature in 1655. Cassini studied Saturn from orbit from 2004 to 2017.",
+        "characteristics": ["It has many moons, including Titan and Enceladus.", "Its average density is lower than that of water."],
+        "interestingFact": "Enceladus ejects geysers that reveal an ocean beneath its icy crust."
+      } },
+      "gallery": [{ "assetId": "planet_saturn" }, { "assetId": "planet_saturn_rings" }],
+      "source": "https://science.nasa.gov/saturn/facts/"
+    },
+    {
+      "id": "uranus",
+      "name": "Urano",
+      "type": "planet",
+      "diameterKm": 50724,
+      "distanceFromSunKm": 2872463000,
+      "distanceFromEarthKm": 2723950000,
+      "visualLaneOffsetY": -190,
+      "visual": {
+        "imageId": "planet_uranus_sprite",
+        "colorKey": "uranus",
+        "radiusScale": 1,
+        "surfaceStyle": "ice-bands",
+        "bands": [
+          { "y": -0.58, "thickness": 0.13, "colorKey": "uranusBand", "alpha": 0.34, "wave": 0.025 },
+          { "y": -0.18, "thickness": 0.1, "colorKey": "sphereHighlight", "alpha": 0.23, "wave": 0.02 },
+          { "y": 0.26, "thickness": 0.15, "colorKey": "uranusBand", "alpha": 0.3, "wave": 0.03 },
+          { "y": 0.65, "thickness": 0.1, "colorKey": "sphereHighlight", "alpha": 0.2, "wave": 0.02 }
+        ]
+      },
+      "description": "Un gigante de hielo con una atmósfera rica en hidrógeno, helio y metano, que le da su tono azul verdoso.",
+      "observationHistory": "William Herschel identificó Urano como planeta en 1781 con un telescopio. Voyager 2 realizó el único sobrevuelo cercano en 1986.",
+      "characteristics": ["Su eje de rotación está inclinado casi 98 grados.", "Tiene anillos oscuros y un sistema de lunas."],
+      "interestingFact": "Por su inclinación extrema, cada polo puede experimentar décadas de luz solar o de oscuridad durante su órbita.",
+      "translations": { "en": {
+        "name": "Uranus",
+        "description": "An ice giant with an atmosphere rich in hydrogen, helium, and methane, which gives it a blue-green color.",
+        "observationHistory": "William Herschel identified Uranus as a planet with a telescope in 1781. Voyager 2 made the only close flyby in 1986.",
+        "characteristics": ["Its rotational axis is tilted by almost 98 degrees.", "It has dark rings and a system of moons."],
+        "interestingFact": "Because of its extreme tilt, each pole can experience decades of sunlight or darkness during its orbit."
+      } },
+      "gallery": [{ "assetId": "planet_uranus" }, { "assetId": "planet_uranus_voyager" }],
+      "source": "https://science.nasa.gov/uranus/facts/"
+    },
+    {
+      "id": "neptune",
+      "name": "Neptuno",
+      "type": "planet",
+      "diameterKm": 49244,
+      "distanceFromSunKm": 4495060000,
+      "distanceFromEarthKm": 4345000000,
+      "visualLaneOffsetY": 100,
+      "visual": {
+        "imageId": "planet_neptune_sprite",
+        "colorKey": "neptune",
+        "radiusScale": 1,
+        "surfaceStyle": "deep-ice-bands",
+        "bands": [
+          { "y": -0.62, "thickness": 0.18, "colorKey": "neptuneBand", "alpha": 0.44, "wave": 0.035 },
+          { "y": -0.28, "thickness": 0.12, "colorKey": "neptuneStorm", "alpha": 0.5, "wave": 0.045 },
+          { "y": 0.1, "thickness": 0.2, "colorKey": "neptuneBand", "alpha": 0.36, "wave": 0.04 },
+          { "y": 0.51, "thickness": 0.14, "colorKey": "neptuneStorm", "alpha": 0.42, "wave": 0.025 }
+        ],
+        "surfaceFeaturesColorKey": "neptuneStorm",
+        "surfaceFeatures": [
+          { "type": "storm", "x": 0.42, "y": -0.2, "width": 0.21, "height": 0.14, "rotation": -18, "alpha": 0.65 }
+        ]
+      },
+      "description": "El planeta más distante del Sol, un gigante de hielo con una atmósfera dinámica y vientos muy rápidos.",
+      "observationHistory": "Las perturbaciones en la órbita de Urano llevaron a predecir matemáticamente Neptuno. Johann Galle lo observó en 1846 tras los cálculos de Urbain Le Verrier y John Couch Adams.",
+      "characteristics": ["Completa una órbita solar en unos 165 años terrestres.", "Tritón, su luna mayor, recorre una órbita retrógrada."],
+      "interestingFact": "Voyager 2 es la única nave que ha pasado cerca de Neptuno, en 1989.",
+      "translations": { "en": {
+        "name": "Neptune",
+        "description": "The most distant planet from the Sun, an ice giant with a dynamic atmosphere and very fast winds.",
+        "observationHistory": "Perturbations in Uranus's orbit led to the mathematical prediction of Neptune. Johann Galle observed it in 1846 after calculations by Urbain Le Verrier and John Couch Adams.",
+        "characteristics": ["It completes one solar orbit in about 165 Earth years.", "Its largest moon, Triton, follows a retrograde orbit."],
+        "interestingFact": "Voyager 2 is the only spacecraft to have flown close to Neptune, in 1989."
+      } },
+      "gallery": [{ "assetId": "planet_neptune" }, { "assetId": "planet_neptune_storms" }],
+      "source": "https://science.nasa.gov/neptune/facts/"
+    }
+  ]
+}
