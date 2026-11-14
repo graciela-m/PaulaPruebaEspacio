@@ -52,8 +52,8 @@ export default class ExplorationScene extends Phaser.Scene {
     this.load.json('sunData', sunUrl);
 
     assetsManifest.images.forEach((image) => {
-      if (image.id && image.path) {
-        // Le quitamos la barra inicial si la tiene y le anteponemos la base de Vite
+      // Verificamos que 'image' y 'image.path' existan y sean texto
+      if (image && image.id && typeof image.path === 'string') {
         const cleanPath = image.path.startsWith('/') ? image.path.slice(1) : image.path;
         const finalPath = `${import.meta.env.BASE_URL}${cleanPath}`;
         
