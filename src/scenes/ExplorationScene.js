@@ -52,7 +52,13 @@ export default class ExplorationScene extends Phaser.Scene {
     this.load.json('sunData', sunUrl);
 
     assetsManifest.images.forEach((image) => {
-      if (image.id && image.path) this.load.image(image.id, image.path);
+      if (image.id && image.path) {
+        // Le quitamos la barra inicial si la tiene y le anteponemos la base de Vite
+        const cleanPath = image.path.startsWith('/') ? image.path.slice(1) : image.path;
+        const finalPath = `${import.meta.env.BASE_URL}${cleanPath}`;
+        
+        this.load.image(image.id, finalPath);
+      }
     });
   }
 
