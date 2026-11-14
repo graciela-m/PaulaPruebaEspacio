@@ -2,10 +2,10 @@ import Phaser from 'phaser';
 import { localizedField } from '../utils/localization.js';
 import createHoverLabel from '../utils/createHoverLabel.js';
 
-const colorValue = (hex) => Number.parseInt(hex.slice(1), 16);
+const colorValue = (hex) => Number.parseInt((hex ?? '#ffffff').slice(1), 16);
 
 export default class SpaceEquipment {
-  constructor(scene, data, body, gameConfig, language) {
+  constructor(scene, data, body, gameConfig, assets, language) {
     this.scene = scene;
     this.id = data.id;
     this.name = localizedField(data, 'name', language) ?? data.name;
@@ -15,13 +15,20 @@ export default class SpaceEquipment {
     this.proximityRadius = this.markerRadius + 3;
     this.timelineVisible = true;
     this.orbitalViewVisible = false;
-    this.container = scene.add.container(body.worldPosition.x, body.worldPosition.y);
+
+    const hasWorldPosition = data.missionCategory === 'deep-space' && data.worldPosition;
+    this.container = scene.add.container(
+      hasWorldPosition ? data.worldPosition.x : body.worldPosition.x,
+      hasWorldPosition ? data.worldPosition.y : body.worldPosition.y,
+    );
     this.container.setDepth(4);
 
-    const angle = Phaser.Math.DegToRad(data.surfaceOffset.angleDegrees);
-    const markerDistance = body.radius * data.surfaceOffset.radiusFactor;
-    this.localX = Math.cos(angle) * markerDistance;
-    this.localY = Math.sin(angle) * markerDistance;
+    const angle = hasWorldPosition
+      ? 0
+      : Phaser.Math.DegToRad(data.surfaceOffset.angleDegrees);
+    const markerDistance = hasWorldPosition ? 0 : body.radius * data.surfaceOffset.radiusFactor;
+    this.localX = hasWorldPosition ? 0 : Math.cos(angle) * markerDistance;
+    this.localY = hasWorldPosition ? 0 : Math.sin(angle) * markerDistance;
 
     const glow = scene.add.circle(
       this.localX,
@@ -31,9 +38,10 @@ export default class SpaceEquipment {
       0.1,
     ).setBlendMode(Phaser.BlendModes.ADD);
     this.glow = glow;
+
     const highlight = scene.add
       .circle(this.localX, this.localY, this.markerRadius + 2)
-      .setStrokeStyle(1, colorValue(gameConfig.palette.proximity), 0.95)
+      .setStrokeStyle(gameConfig.visual.proximityRingWidth ?? 2, colorValue(gameConfig.palette.proximity), 0.95)
       .setVisible(false);
     this.highlight = highlight;
     this.container.add([glow, highlight]);
@@ -75,7 +83,7 @@ export default class SpaceEquipment {
         this.localX + (this.id === 'voyager-1' ? 39 : -39),
         this.localY - 21,
         2.8,
-        colorValue(gameConfig.palette.sunLight),
+        colorValue(gameConfig.palette.sunFlare),
         1,
       ).setBlendMode(Phaser.BlendModes.ADD);
       this.container.add(this.deepSpaceBeacon);
@@ -97,6 +105,7 @@ export default class SpaceEquipment {
       this.orbitIndicator.setAlpha(0.18);
     }
     this.container.add(this.machineSilhouette);
+
     this.timelinePulse = scene.add.circle(this.localX, this.localY, this.markerRadius + 2)
       .setStrokeStyle(1.2, colorValue(gameConfig.palette.proximity), 0.9)
       .setAlpha(0)
@@ -104,6 +113,7 @@ export default class SpaceEquipment {
       .setVisible(false);
     this.container.add(this.timelinePulse);
 
+    // Etiquetas flotantes al pasar el cursor (hover)
     createHoverLabel(
       scene,
       this.container,
@@ -118,18 +128,6 @@ export default class SpaceEquipment {
     );
   }
 
-  get x() {
-    return this.container.x + this.localX;
-  }
-
-  get y() {
-    return this.container.y + this.localY;
-  }
-
-  setHighlighted(value) {
-    this.highlight.setVisible(value);
-  }
-
   drawMachineSilhouette(graphics, gameConfig) {
     const x = this.localX;
     const y = this.localY;
@@ -137,8 +135,9 @@ export default class SpaceEquipment {
     const lineColor = colorValue(palette.text);
     const detailColor = colorValue(palette.electric);
     const metalColor = colorValue(palette.metal);
-    const goldColor = colorValue(palette.sunLight);
+    const goldColor = colorValue(palette.sunFlare);
     const shadowColor = colorValue(palette.background);
+
     const stroke = (points, color = lineColor, width = 2, alpha = 0.95) => {
       graphics.lineStyle(width, color, alpha);
       graphics.beginPath();
@@ -148,6 +147,7 @@ export default class SpaceEquipment {
       });
       graphics.strokePath();
     };
+
     const fillPolygon = (points, fillColor = detailColor, alpha = 0.96) => {
       graphics.fillStyle(fillColor, alpha);
       graphics.beginPath();
@@ -160,6 +160,7 @@ export default class SpaceEquipment {
       graphics.lineStyle(1.5, lineColor, 0.95);
       graphics.strokePath();
     };
+
     const wheel = (wheelX, wheelY, radius = 5) => {
       graphics.fillStyle(shadowColor, 1);
       graphics.fillCircle(x + wheelX, y + wheelY, radius);
@@ -184,6 +185,7 @@ export default class SpaceEquipment {
       graphics.fillStyle(goldColor, 0.95);
       graphics.fillCircle(x + wheelX, y + wheelY, radius * 0.18);
     };
+
     const panel = (panelX, panelY, width, height, columns = 5, rows = 3) => {
       graphics.fillStyle(shadowColor, 0.98);
       graphics.fillRect(x + panelX - width / 2, y + panelY - height / 2, width, height);
@@ -205,6 +207,18 @@ export default class SpaceEquipment {
         graphics.strokePath();
       }
     };
+
+    const roverChassis = ({ width, wheels, wheelRadius }) => {
+      fillPolygon([[-width / 2, -7], [width / 2, -7], [width / 2 - 6, 5], [-width / 2 + 6, 5]], metalColor);
+      stroke([[-width / 2 + 4, 2], [width / 2 - 4, 2]], lineColor, 1.8);
+      const halfWheels = wheels / 2;
+      for (let i = 0; i < halfWheels; i++) {
+        const wx = -width / 2 + 8 + i * ((width - 16) / (halfWheels - 1 || 1));
+        wheel(wx, 12, wheelRadius);
+        wheel(wx, -12, wheelRadius);
+      }
+    };
+
     const cameraMast = (mastY = -27) => {
       stroke([[0, -6], [0, mastY]], metalColor, 2.4);
       stroke([[-4, mastY], [4, mastY]], lineColor, 2.4);
@@ -212,36 +226,6 @@ export default class SpaceEquipment {
       graphics.fillCircle(x - 4, y + mastY, 2.1);
       graphics.fillStyle(goldColor, 1);
       graphics.fillCircle(x + 4, y + mastY, 2.1);
-    };
-    const roverChassis = ({ width = 46, wheels = 6, wheelRadius = 4.2 } = {}) => {
-      const left = -width / 2;
-      const right = width / 2;
-      fillPolygon([
-        [left + 5, -8],
-        [right - 5, -8],
-        [right, -1],
-        [right - 4, 6],
-        [left + 4, 6],
-        [left, -1],
-      ], metalColor);
-      stroke([[left + 6, -4], [right - 6, -4]], goldColor, 1.5);
-      stroke([[left + 3, 2], [right - 3, 2]], detailColor, 1.2);
-
-      const wheelCount = Math.max(2, Math.floor(wheels / 2));
-      for (let index = 0; index < wheelCount; index += 1) {
-        const wheelX = wheelCount === 1
-          ? 0
-          : Phaser.Math.Linear(left + 3, right - 3, index / (wheelCount - 1));
-        stroke([[wheelX, 2], [wheelX, 9]], lineColor, 1.8);
-        wheel(wheelX, 12, wheelRadius);
-      }
-
-      if (wheels === 4) {
-        stroke([[-width * 0.29, -7], [-width * 0.37, -13]], lineColor, 1.4);
-        stroke([[width * 0.29, -7], [width * 0.37, -13]], lineColor, 1.4);
-        wheel(-width * 0.39, -15, wheelRadius);
-        wheel(width * 0.39, -15, wheelRadius);
-      }
     };
 
     if (this.id === 'apollo-11-descent-stage') {
@@ -366,6 +350,8 @@ export default class SpaceEquipment {
   }
 
   setOrbitalView(value, zoom = 1) {
+    if (this.data.missionCategory === 'deep-space') return;
+
     const iconScale = value ? Phaser.Math.Clamp(1 / zoom, 0.06, 1) : 1;
     if (this.orbitalViewVisible === value && this.orbitalIconScale === iconScale) return;
     this.orbitalViewVisible = value;
@@ -473,5 +459,9 @@ export default class SpaceEquipment {
       ease: 'Sine.Out',
       onComplete: () => this.timelinePulse.setVisible(false).setScale(0.55),
     });
+  }
+
+  setHighlighted(value) {
+    this.highlight.setVisible(value);
   }
 }

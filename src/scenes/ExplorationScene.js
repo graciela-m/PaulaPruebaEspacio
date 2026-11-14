@@ -5,15 +5,18 @@ import gameConfig from '../data/game-config.json';
 import equipmentUrl from '../data/equipment.json?url&no-inline';
 import moonsUrl from '../data/moons.json?url&no-inline';
 import planetsUrl from '../data/planets.json?url&no-inline';
+import sunUrl from '../data/sun.json?url&no-inline';
 import spacecraftUrl from '../data/spacecraft.json?url&no-inline';
 import CelestialBody from '../objects/CelestialBody.js';
 import SpaceEquipment from '../objects/SpaceEquipment.js';
 import Spacecraft from '../objects/Spacecraft.js';
 import createStarfield from '../utils/createStarfield.js';
+import createActionButton from '../utils/createActionButton.js';
 import { getSavedLanguage, localizedAssetCaption, localizedField, translate } from '../utils/localization.js';
 
 const SURFACE_MAP_WIDTH = 4800;
 const SURFACE_MAP_HEIGHT = 1600;
+const SURFACE_VIEW_ZOOM = 0.64;
 const SURFACE_SPACECRAFT_SCALE = 0.55;
 const SURFACE_GROUND_PROFILE = [
   [0, 0.76],
@@ -46,6 +49,7 @@ export default class ExplorationScene extends Phaser.Scene {
     this.load.json('planetsData', planetsUrl);
     this.load.json('moonsData', moonsUrl);
     this.load.json('equipmentData', equipmentUrl);
+    this.load.json('sunData', sunUrl);
 
     assetsManifest.images.forEach((image) => {
       if (image.id && image.path) this.load.image(image.id, image.path);
@@ -59,13 +63,16 @@ export default class ExplorationScene extends Phaser.Scene {
     this.planetsData = this.cache.json.get('planetsData');
     this.moonsData = this.cache.json.get('moonsData');
     this.equipmentData = this.cache.json.get('equipmentData');
+    this.sunData = this.cache.json.get('sunData');
     this.language = getSavedLanguage();
+
     const requiredData = {
       explorationAssets: this.assets,
       spacecraftData: this.spacecraftData,
       planetsData: this.planetsData,
       moonsData: this.moonsData,
       equipmentData: this.equipmentData,
+      sunData: this.sunData,
     };
     const missingData = Object.entries(requiredData)
       .filter(([, value]) => value === undefined || value === null)
@@ -84,6 +91,7 @@ export default class ExplorationScene extends Phaser.Scene {
     this.surfaceViewZoom = gameConfig.world.camera.zoom;
     this.surfaceSpacecraftScale = 1;
     this.currentCameraZoom = gameConfig.world.camera.zoom;
+
     this.worldBounds = {
       x: 0,
       y: 0,
@@ -100,6 +108,7 @@ export default class ExplorationScene extends Phaser.Scene {
 
     this.worldObjects.push(...createStarfield(this, gameConfig, {
       worldSize: { width: this.worldBounds.width, height: this.worldBounds.height },
+      densityScale: 8,
     }));
     this.createCelestialBodies();
     this.createEquipmentMarkers();
@@ -107,6 +116,7 @@ export default class ExplorationScene extends Phaser.Scene {
     this.spacecraft = new Spacecraft(this, this.spacecraftData, gameConfig);
     this.worldObjects.push(this.spacecraft.container);
     this.createLighting();
+
     this.targets = [
       ...this.celestialBodies.values(),
       ...this.equipmentMarkers,
@@ -139,23 +149,19 @@ export default class ExplorationScene extends Phaser.Scene {
     const planetScale = scale.planetDiameter;
     const moonScale = scale.moonDiameter;
 
+    this.createSun();
+
     this.planetsData.objects.forEach((data) => {
-      // Square-root compression preserves orbital order while making inner and outer travel playable.
       const worldPosition = {
-        x: scale.planetDistance.sunReferenceX
-          + Math.sqrt(data.distanceFromSunKm / 1000000)
-            * scale.planetDistance.unitsPerSqrtMillionKm,
-        y: scale.planetDistance.sunReferenceY + data.visualLaneOffsetY,
+        ...this.getSolarMapPosition(data.distanceFromSunKm, data.visualAngleDegrees),
       };
-      const radius = data.type === 'star'
-        ? data.visual.radius
-        : Phaser.Math.Clamp(
-          planetScale.referenceVisualRadius
-            * (data.diameterKm / planetScale.referenceDiameterKm) ** planetScale.diameterExponent
-            * (data.visual.radiusScale ?? 1),
-          planetScale.minimumVisualRadius,
-          planetScale.maximumVisualRadius,
-        );
+      const radius = Phaser.Math.Clamp(
+        planetScale.referenceVisualRadius
+          * (data.diameterKm / planetScale.referenceDiameterKm) ** planetScale.diameterExponent
+          * (data.visual.radiusScale ?? 1),
+        planetScale.minimumVisualRadius,
+        planetScale.maximumVisualRadius,
+      );
       const body = new CelestialBody(this, {
         ...data,
         worldPosition,
@@ -198,6 +204,37 @@ export default class ExplorationScene extends Phaser.Scene {
     });
   }
 
+  getSolarMapPosition(distanceFromSunKm, visualAngleDegrees) {
+    const distanceScale = gameConfig.world.coordinateSystem.planetDistance;
+    const radius = Math.sqrt(distanceFromSunKm / 1000000) * distanceScale.unitsPerSqrtMillionKm;
+    const angle = Phaser.Math.DegToRad(visualAngleDegrees);
+    return {
+      x: distanceScale.sunReferenceX + radius * Math.cos(angle),
+      y: distanceScale.sunReferenceY + radius * Math.sin(angle),
+    };
+  }
+
+  createSun() {
+    const visualScale = gameConfig.world.coordinateSystem.sunDiameter;
+    const radius = Phaser.Math.Clamp(
+      visualScale.referenceVisualRadius
+        * (this.sunData.diameterKm / visualScale.earthDiameterKm) ** visualScale.diameterExponent,
+      visualScale.minimumVisualRadius,
+      visualScale.maximumVisualRadius,
+    );
+    const distanceScale = gameConfig.world.coordinateSystem.planetDistance;
+    const sun = new CelestialBody(this, {
+      ...this.sunData,
+      worldPosition: {
+        x: distanceScale.sunReferenceX,
+        y: distanceScale.sunReferenceY,
+      },
+      visual: { ...this.sunData.visual, radius },
+    }, gameConfig, this.assets, this.language);
+    this.celestialBodies.set(sun.id, sun);
+    this.worldObjects.push(sun.container);
+  }
+
   createEquipmentMarkers() {
     const records = this.equipmentData.records;
     records.forEach((data) => {
@@ -206,7 +243,7 @@ export default class ExplorationScene extends Phaser.Scene {
         console.error(`[ExplorationScene] Cuerpo asociado no encontrado para ${data.id}: ${data.celestialBodyId}`);
         return;
       }
-      const marker = new SpaceEquipment(this, data, body, gameConfig, this.language);
+      const marker = new SpaceEquipment(this, data, body, gameConfig, this.assets, this.language);
       this.equipmentMarkers.push(marker);
       this.worldObjects.push(marker.container);
     });
@@ -248,13 +285,14 @@ export default class ExplorationScene extends Phaser.Scene {
               : 'exploration.flashlightOff',
           ))
           .setColor(this.flashlightEnabled
-            ? gameConfig.palette.sunLight
+            ? gameConfig.palette.sunFlare
             : gameConfig.palette.muted);
         return;
       }
       if (event.key.toLowerCase() === 'q') {
-        if (this.surfaceModeBodyId || !this.infoPopupOpen) {
-          if (this.infoPopupOpen) this.closeInfoPopup();
+        if (this.infoPopupOpen) this.closeInfoPopup();
+        const nearbyBody = this.getNearbyMissionBody();
+        if (this.surfaceModeBodyId || nearbyBody) {
           this.toggleSurfaceMode();
         }
         return;
@@ -364,6 +402,20 @@ export default class ExplorationScene extends Phaser.Scene {
       wordWrap: { width: gameConfig.visual.proximityPanelWidth - 28 },
     }).setOrigin(0, 0.5);
     this.proximityPanel.add([this.proximityBackground, this.proximityName, this.proximityStatus]);
+
+    this.finishButton = createActionButton(this, {
+      width: 250,
+      height: 42,
+      text: translate(this.language, 'conclusion.finish'),
+      palette: gameConfig.palette,
+      visual: gameConfig.visual,
+      onPress: () => {
+        this.scene.launch('ConclusionScene');
+        this.scene.pause();
+      },
+    });
+    this.finishButton.label.setFontSize(12).setLetterSpacing(0);
+
     this.hud.add([
       this.hudTitle,
       this.hudSubtitle,
@@ -373,6 +425,7 @@ export default class ExplorationScene extends Phaser.Scene {
       this.targetNameHUD,
       this.proximityPanel,
       this.surfaceObjectiveCounter,
+      this.finishButton.container,
     ]);
 
     this.createInfoPopup();
@@ -625,7 +678,7 @@ export default class ExplorationScene extends Phaser.Scene {
   applyTimelineFilter() {
     this.equipmentMarkers.forEach((marker) => {
       const visible = this.selectedTimelineYear === null
-        || marker.data.arrivalYear <= this.selectedTimelineYear;
+        || this.getTimelineYear(marker.data) <= this.selectedTimelineYear;
       marker.setTimelineVisible(visible);
       if (this.surfaceModeBodyId) {
         marker.container.setVisible(visible && marker.bodyId === this.surfaceModeBodyId);
@@ -647,12 +700,23 @@ export default class ExplorationScene extends Phaser.Scene {
     this.updateProximity();
   }
 
+  isVisibleOnTimeline(target) {
+    return !target.data.equipmentType
+      || this.selectedTimelineYear === null
+      || this.getTimelineYear(target.data) <= this.selectedTimelineYear;
+  }
+
+  getTimelineYear(record) {
+    return record.arrivalYear ?? record.launchYear;
+  }
+
   getTimelineStatusLabel() {
     const yearLabel = this.selectedTimelineYear === null
       ? translate(this.language, 'exploration.timeline.all')
       : String(this.selectedTimelineYear);
     const activeCount = this.equipmentData.records.filter((record) => (
-      this.selectedTimelineYear === null || record.arrivalYear <= this.selectedTimelineYear
+      this.selectedTimelineYear === null
+      || this.getTimelineYear(record) <= this.selectedTimelineYear
     )).length;
     const missionLabel = translate(
       this.language,
@@ -707,118 +771,6 @@ export default class ExplorationScene extends Phaser.Scene {
     });
   }
 
-  createInfoPopup() {
-    const width = gameConfig.visual.infoPopupWidth;
-    const height = gameConfig.visual.infoPopupHeight;
-    const padding = gameConfig.visual.infoPopupPadding;
-    const contentWidth = width - padding * 2;
-    const contentTop = -height / 2 + padding + 88;
-    const contentHeight = height - padding * 2 - 150;
-    const contentLeft = -width / 2 + padding;
-    const fillColor = Number.parseInt(gameConfig.palette.buttonFill.slice(1), 16);
-    const borderColor = Number.parseInt(gameConfig.palette.electric.slice(1), 16);
-
-    this.infoPopup = this.add.container(0, 0).setDepth(1100).setVisible(false);
-    this.infoPopupHeight = height;
-    this.infoPopupBackground = this.add
-      .rectangle(0, 0, width, height, fillColor, 0.97)
-      .setStrokeStyle(1.5, borderColor, 0.95);
-    this.infoPopupIcon = this.add
-      .circle(-width / 2 + padding + 16, -height / 2 + padding + 16, 15,
-        Number.parseInt(gameConfig.palette.proximity.slice(1), 16))
-      .setStrokeStyle(2, Number.parseInt(gameConfig.palette.text.slice(1), 16), 0.9);
-    this.infoPopupTitle = this.add.text(-width / 2 + padding + 42, -height / 2 + padding, '', {
-      fontFamily: gameConfig.visual.monoFontFamily,
-      fontSize: `${gameConfig.visual.infoPopupTitleFontSize}px`,
-      fontStyle: 'bold',
-      color: gameConfig.palette.text,
-      lineSpacing: 2,
-      wordWrap: { width: width - padding * 2 - 112 },
-    });
-    this.infoPopupArchiveLabel = this.add.text(
-      -width / 2 + padding + 42,
-      -height / 2 + padding,
-      translate(this.language, 'exploration.archive.title'),
-      {
-        fontFamily: gameConfig.visual.monoFontFamily,
-        fontSize: `${gameConfig.visual.infoPopupGalleryCreditFontSize}px`,
-        fontStyle: 'bold',
-        color: gameConfig.palette.electric,
-        letterSpacing: 1,
-      },
-    );
-    this.infoPopupClose = this.add.text(width / 2 - padding, -height / 2 + padding, translate(this.language, 'buttons.close'), {
-      fontFamily: gameConfig.visual.monoFontFamily,
-      fontSize: `${gameConfig.visual.infoPopupCloseFontSize}px`,
-      color: gameConfig.palette.electric,
-    }).setOrigin(1, 0).setInteractive({ useHandCursor: true });
-    this.infoPopupClose.on('pointerdown', () => this.closeInfoPopup());
-
-    this.infoPopupBody = this.add.text(contentLeft, contentTop, '', {
-      fontFamily: gameConfig.visual.bodyFontFamily,
-      fontSize: `${gameConfig.visual.infoPopupBodyFontSize}px`,
-      color: gameConfig.palette.text,
-      lineSpacing: 6,
-      wordWrap: { width: contentWidth },
-    });
-    this.infoPopupGallery = this.add.container(0, 0).setVisible(false);
-    this.infoPopupContent = this.add.container(0, 0);
-    this.infoPopupStatusBadge = this.add.text(0, 0, '', {
-      fontFamily: gameConfig.visual.monoFontFamily,
-      fontSize: `${gameConfig.visual.infoPopupGalleryCreditFontSize}px`,
-      fontStyle: 'bold',
-      color: gameConfig.palette.electric,
-      backgroundColor: gameConfig.palette.buttonHover,
-      padding: { left: 10, right: 10, top: 6, bottom: 6 },
-      wordWrap: { width: contentWidth },
-    }).setVisible(false);
-    this.infoPopupContent.add([
-      this.infoPopupStatusBadge,
-      this.infoPopupBody,
-      this.infoPopupGallery,
-    ]);
-
-    this.infoPopupTabButtons = {};
-    const tabKeys = ['story', 'science', 'status'];
-    const tabWidth = (width - padding * 2 - 16) / tabKeys.length;
-    tabKeys.forEach((tab, index) => {
-      const button = this.add.text(0, 0, translate(this.language, `exploration.archive.tabs.${tab}`), {
-        fontFamily: gameConfig.visual.monoFontFamily,
-        fontSize: `${gameConfig.visual.infoPopupGalleryCreditFontSize}px`,
-        color: gameConfig.palette.muted,
-        align: 'center',
-        backgroundColor: gameConfig.palette.background,
-        padding: { left: 8, right: 8, top: 9, bottom: 9 },
-        fixedWidth: tabWidth,
-      }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-      button.on('pointerdown', () => this.setInfoPopupTab(tab));
-      this.infoPopupTabButtons[tab] = button;
-    });
-
-    this.infoPopupContentMaskSource = this.make.graphics({ x: 0, y: 0, add: false });
-    this.infoPopupContentMaskSource.fillStyle(0xffffff, 1);
-    this.infoPopupContentMaskSource.fillRect(contentLeft, contentTop, contentWidth, contentHeight);
-    this.infoPopupContent.setMask(this.infoPopupContentMaskSource.createGeometryMask());
-
-    this.infoPopup.add([
-      this.infoPopupBackground,
-      this.infoPopupIcon,
-      this.infoPopupArchiveLabel,
-      this.infoPopupTitle,
-      this.infoPopupClose,
-      this.infoPopupContent,
-    ]);
-    this.infoPopup.add(Object.values(this.infoPopupTabButtons));
-    this.hud.add(this.infoPopup);
-
-    this.input.on('wheel', this.handleInfoPopupWheel, this);
-    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-      this.input.off('wheel', this.handleInfoPopupWheel, this);
-      this.infoPopupContentMaskSource.destroy();
-      this.infoPopupImageMaskSource?.destroy();
-    });
-  }
-
   configureCameras() {
     const cameraConfig = gameConfig.world.camera;
     this.worldCamera = this.cameras.main;
@@ -840,32 +792,45 @@ export default class ExplorationScene extends Phaser.Scene {
     this.hudCamera.setZoom(1);
     this.hudCamera.ignore(this.worldObjects);
     this.updateZoomIndicator();
-    console.info('[ExplorationScene] Cámara centrada', {
-      x: this.spacecraft.x,
-      y: this.spacecraft.y,
-      zoom: this.worldCamera.zoom,
-    });
+  }
+
+  updateZoomIndicator() {
+    const percent = Math.round((this.currentCameraZoom ?? gameConfig.world.camera.zoom) * 100);
+    this.zoomIndicator?.setText(
+      `${translate(this.language, 'exploration.zoomLabel')}: ${percent}%`,
+    );
   }
 
   layoutHUD(gameSize) {
+    this.hudTitle.setPosition(22, 18);
     this.hudSubtitle.setPosition(23, 43);
     this.flashlightStatus.setPosition(23, 62);
     this.zoomIndicator.setPosition(gameSize.width - 22, 18);
     this.targetNameHUD.setPosition(gameSize.width / 2, 22);
     this.movementHint.setPosition(22, gameSize.height - 65);
 
+    const finishWidth = Math.min(250, Math.max(130, gameSize.width * 0.48));
+    this.finishButton.setSize(finishWidth, 42);
+    this.finishButton.container.input.hitArea.setTo(0, 0, finishWidth, 42);
+    this.finishButton.label.setFontSize(finishWidth < 200 ? 9 : 12);
+    this.finishButton.container.setPosition(gameSize.width - finishWidth / 2 - 16, 36);
+    this.hudTitle.setFontSize(gameSize.width < 450 ? 13 : gameConfig.visual.hudTitleFontSize);
+
     const panelWidth = Math.min(gameConfig.visual.proximityPanelWidth, gameSize.width - 32);
     this.proximityBackground.setSize(panelWidth, gameConfig.visual.proximityPanelHeight);
     this.proximityName.setPosition(-panelWidth / 2 + 14, -18);
     this.proximityStatus.setPosition(-panelWidth / 2 + 14, 20);
     this.proximityName.setWordWrapWidth(panelWidth - 28, true);
+    this.proximityStatus.setWordWrapWidth(panelWidth - 28, true);
     this.proximityPanel.setPosition(
       gameSize.width / 2,
       gameSize.height - gameConfig.visual.proximityPanelHeight / 2 - 62,
     );
+
     this.layoutTimelineControl(gameSize);
     this.surfaceObjectiveCounter.setPosition(gameSize.width - 18, 50);
     this.hudCamera?.setViewport(0, 0, gameSize.width, gameSize.height);
+
     if (this.activeTarget) this.positionProximityPanel();
     if (this.infoPopupOpen) this.positionInfoPopup();
   }
@@ -894,12 +859,15 @@ export default class ExplorationScene extends Phaser.Scene {
   updateProximity() {
     const { radius, hysteresis } = gameConfig.world.proximity;
     const candidates = this.targets
-      .filter((target) => !this.surfaceModeBodyId
-        || (target.data.equipmentType && target.bodyId === this.surfaceModeBodyId))
+      .filter((target) => {
+        if (!this.surfaceModeBodyId) return true;
+        return target.bodyId === this.surfaceModeBodyId;
+      })
       .filter((target) => this.isVisibleOnTimeline(target))
       .map((target) => ({ target, distance: this.getTargetDistance(target) - target.proximityRadius }))
       .filter(({ distance }) => distance <= radius)
       .sort((first, second) => first.distance - second.distance);
+
     let nearest = candidates[0] ?? null;
     if (this.activeTarget) {
       const active = candidates.find(({ target }) => target.id === this.activeTarget.id);
@@ -934,10 +902,11 @@ export default class ExplorationScene extends Phaser.Scene {
   }
 
   getAvailableMissionBodies() {
+    const surfaceBodyIds = new Set(['moon', 'mars']);
     const missionBodyIds = new Set(
       this.equipmentMarkers
         .filter((marker) => this.isVisibleOnTimeline(marker)
-          && marker.data.missionCategory !== 'deep-space')
+          && surfaceBodyIds.has(marker.bodyId))
         .map((marker) => marker.bodyId),
     );
     return [...missionBodyIds]
@@ -946,20 +915,29 @@ export default class ExplorationScene extends Phaser.Scene {
   }
 
   getNearbyMissionBody() {
-    return this.getAvailableMissionBodies()
-      .map((body) => ({
-        body,
-        surfaceDistance: Math.max(0, this.getTargetDistance(body) - body.radius),
-      }))
-      .filter(({ body, surfaceDistance }) => (
-        surfaceDistance <= Math.max(body.radius * 0.8, gameConfig.visual.markerRadius * 3)
-      ))
+    const availableBodies = this.getAvailableMissionBodies();
+    if (this.activeTarget && this.isTargetInteractable(this.activeTarget)) {
+      const targetBodyId = this.activeTarget.bodyId ?? this.activeTarget.id;
+      const targetBody = availableBodies.find((body) => body.id === targetBodyId);
+      if (targetBody) return targetBody;
+    }
+
+    return availableBodies
+      .map((body) => {
+        const centerDistance = this.getTargetDistance(body);
+        const surfaceDistance = Math.max(0, centerDistance - body.radius);
+        return { body, surfaceDistance };
+      })
+      .filter(({ body, surfaceDistance }) => {
+        const tolerance = Math.max(body.radius * 1.5, 120);
+        return surfaceDistance <= tolerance;
+      })
       .sort((first, second) => first.surfaceDistance - second.surfaceDistance)[0]?.body ?? null;
   }
 
   updateSurfacePrompt() {
     if (this.surfaceModeBodyId) {
-      const interactableMission = this.activeTarget?.data.equipmentType
+      const interactableMission = this.activeTarget
         && this.activeTarget.bodyId === this.surfaceModeBodyId
         && this.isTargetInteractable(this.activeTarget);
       this.proximityName.setText(interactableMission ? this.activeTarget.name : '');
@@ -1046,15 +1024,10 @@ export default class ExplorationScene extends Phaser.Scene {
     }
 
     const body = this.getNearbyMissionBody();
-    if (!body) return;
+    if (!body || (body.id !== 'moon' && body.id !== 'mars')) return;
 
     this.surfaceModeBodyId = body.id;
-    const gameSize = this.scale.gameSize;
-    this.surfaceViewZoom = Phaser.Math.Clamp(
-      Math.min(gameSize.width / 1800, gameSize.height / 1100),
-      0.35,
-      0.72,
-    );
+    this.surfaceViewZoom = SURFACE_VIEW_ZOOM;
     const bounds = {
       x: body.x - SURFACE_MAP_WIDTH / 2,
       y: body.y - SURFACE_MAP_HEIGHT / 2,
@@ -1215,9 +1188,9 @@ export default class ExplorationScene extends Phaser.Scene {
     } else {
       const sunX = worldX(0.86);
       const sunY = worldY(0.44);
-      this.surfaceTerrain.fillStyle(color('sunLight'), 0.82);
+      this.surfaceTerrain.fillStyle(color('sunFlare'), 0.82);
       this.surfaceTerrain.fillCircle(sunX, sunY, 42);
-      this.surfaceTerrain.fillStyle(color('sunGlow'), 0.16);
+      this.surfaceTerrain.fillStyle(color('sunCorona'), 0.16);
       this.surfaceTerrain.fillCircle(sunX, sunY, 92);
     }
 
@@ -1293,13 +1266,7 @@ export default class ExplorationScene extends Phaser.Scene {
     const inSurfaceMode = Boolean(this.surfaceModeBodyId);
     const targetZoom = inSurfaceMode ? this.surfaceViewZoom : this.defaultCameraZoom;
     const targetScale = inSurfaceMode ? SURFACE_SPACECRAFT_SCALE : 1;
-    const zoomSmoothing = 1 - Math.exp(-delta / 560);
     const scaleSmoothing = 1 - Math.exp(-delta / 480);
-    this.currentCameraZoom = Phaser.Math.Linear(
-      this.currentCameraZoom,
-      targetZoom,
-      zoomSmoothing,
-    );
     this.surfaceSpacecraftScale = Phaser.Math.Linear(
       this.surfaceSpacecraftScale,
       targetScale,
@@ -1307,6 +1274,12 @@ export default class ExplorationScene extends Phaser.Scene {
     );
     this.spacecraft.container.setScale(this.surfaceSpacecraftScale);
 
+    const zoomSmoothing = 1 - Math.exp(-delta / 560);
+    this.currentCameraZoom = Phaser.Math.Linear(
+      this.currentCameraZoom,
+      targetZoom,
+      zoomSmoothing,
+    );
     if (Math.abs(this.worldCamera.zoom - this.currentCameraZoom) > 0.001) {
       this.worldCamera.setZoom(this.currentCameraZoom);
       this.updateZoomIndicator();
@@ -1327,100 +1300,178 @@ export default class ExplorationScene extends Phaser.Scene {
     );
   }
 
-  isVisibleOnTimeline(target) {
-    return !target.data.equipmentType
-      || this.selectedTimelineYear === null
-      || target.data.arrivalYear <= this.selectedTimelineYear;
+  getTargetPosition(target) {
+    if (target.container) {
+      return {
+        x: target.container.x + (target.localX ?? 0),
+        y: target.container.y + (target.localY ?? 0),
+      };
+    }
+
+    return { x: target.x, y: target.y };
   }
 
   getTargetDistance(target) {
-    return Math.hypot(this.spacecraft.x - target.x, this.spacecraft.y - target.y);
+    const position = this.getTargetPosition(target);
+    return Math.hypot(this.spacecraft.x - position.x, this.spacecraft.y - position.y);
   }
 
   isTargetInteractable(target) {
-    const surfaceDistance = this.getTargetDistance(target) - target.proximityRadius;
-    return surfaceDistance <= gameConfig.world.proximity.interactionRadius;
+    const distance = this.getTargetDistance(target);
+    return distance - target.proximityRadius <= gameConfig.world.proximity.interactionRadius;
   }
 
-  openInfoPopup(target) {
-    if (target.data.equipmentType) {
-      this.rememberLegacy(target.id);
-      this.updateSurfaceObjectiveCounter();
-    }
-    this.infoPopupTarget = target;
-    this.infoPopupTitle.setText(localizedField(target.data, 'name', this.language) ?? target.name);
-    this.infoPopupScrollOffset = 0;
-    this.infoPopupContent.setY(0);
-    this.populateInfoGallery(target);
-    this.setInfoPopupTab('story');
+  createInfoPopup() {
+    const width = gameConfig.visual.infoPopupWidth;
+    const height = gameConfig.visual.infoPopupHeight;
+    const padding = gameConfig.visual.infoPopupPadding;
+    const contentWidth = width - padding * 2;
+    const contentTop = -height / 2 + padding + 88;
+    const contentHeight = height - padding * 2 - 150;
+    const contentLeft = -width / 2 + padding;
+    const fillColor = Number.parseInt(gameConfig.palette.buttonFill.slice(1), 16);
+    const borderColor = Number.parseInt(gameConfig.palette.electric.slice(1), 16);
 
-    const visual = target.data.visual;
-    const colorKey = visual?.colorKey ?? visual?.accentColorKey;
-    const iconColor = colorKey
-      ? gameConfig.palette[colorKey]
-      : gameConfig.palette.proximity;
-    this.infoPopupIcon.setFillStyle(Number.parseInt(iconColor.slice(1), 16), 1);
-    this.infoPopupOpen = true;
-    this.infoPopup.setVisible(true);
-    this.positionInfoPopup();
-  }
-
-  populateInfoGallery(target) {
-    this.infoPopupGallery.removeAll(true);
-    this.infoPopupGallery.setVisible(false);
-    this.infoPopupImageMaskSource?.destroy();
-    this.infoPopupImageMaskSource = null;
-    this.infoPopupImageMask = null;
-    this.infoPopupImage = null;
-    this.infoPopupGalleryItems = (target.data.gallery ?? []).filter((item) => (
-      item.assetId
-      && this.assets.images.some((asset) => asset.id === item.assetId)
-      && this.textures.exists(item.assetId)
-    ));
-    this.infoPopupScrollOffset = 0;
-    this.infoPopupContent.setY(0);
-
-    if (this.infoPopupGalleryItems.length === 0) {
-      return;
-    }
-
-    const width = gameConfig.visual.infoPopupWidth - gameConfig.visual.infoPopupPadding * 2;
-    const imageHeight = gameConfig.visual.infoPopupGalleryImageHeight;
-    const imageWidth = width;
-    const frame = this.add.graphics();
-    frame.fillStyle(Number.parseInt(gameConfig.palette.background.slice(1), 16), 0.92);
-    frame.fillRoundedRect(-imageWidth / 2, -imageHeight / 2, imageWidth, imageHeight, 8);
-    frame.lineStyle(1, Number.parseInt(gameConfig.palette.electric.slice(1), 16), 0.62);
-    frame.strokeRoundedRect(-imageWidth / 2, -imageHeight / 2, imageWidth, imageHeight, 8);
-    this.infoPopupGallery.add(frame);
-
-    this.infoPopupImage = this.add.image(0, 0, this.infoPopupGalleryItems[0].assetId);
-    this.fitInfoPopupImage();
-    this.infoPopupImageMaskSource = this.make.graphics({ x: 0, y: 0, add: false });
-    this.infoPopupImageMaskSource.fillStyle(0xffffff, 1);
-    this.infoPopupImageMaskSource.fillRoundedRect(-imageWidth / 2, -imageHeight / 2, imageWidth, imageHeight, 8);
-    this.infoPopupImageMask = this.infoPopupImageMaskSource.createGeometryMask();
-    this.infoPopupImage.setMask(this.infoPopupImageMask);
-    this.infoPopupGallery.add(this.infoPopupImage);
-
-    this.infoPopupCaption = this.add.text(0, imageHeight / 2 + 8, '', {
-      fontFamily: gameConfig.visual.bodyFontFamily,
-      fontSize: `${gameConfig.visual.infoPopupGalleryCaptionFontSize}px`,
+    this.infoPopup = this.add.container(0, 0).setDepth(1100).setVisible(false);
+    this.infoPopupHeight = height;
+    this.infoPopupBackground = this.add
+      .rectangle(0, 0, width, height, fillColor, 0.97)
+      .setStrokeStyle(1.5, borderColor, 0.95);
+    this.infoPopupIcon = this.add
+      .circle(-width / 2 + padding + 16, -height / 2 + padding + 16, 15,
+        Number.parseInt(gameConfig.palette.proximity.slice(1), 16))
+      .setStrokeStyle(2, Number.parseInt(gameConfig.palette.text.slice(1), 16), 0.9);
+    this.infoPopupTitle = this.add.text(-width / 2 + padding + 42, -height / 2 + padding, '', {
+      fontFamily: gameConfig.visual.monoFontFamily,
+      fontSize: `${gameConfig.visual.infoPopupTitleFontSize}px`,
+      fontStyle: 'bold',
       color: gameConfig.palette.text,
-      align: 'center',
-      wordWrap: { width: imageWidth - 24 },
-    }).setOrigin(0.5, 0);
-    this.infoPopupCredit = this.add.text(0, imageHeight / 2 + 29, '', {
+      lineSpacing: 2,
+      wordWrap: { width: width - padding * 2 - 112 },
+    });
+    this.infoPopupArchiveLabel = this.add.text(
+      -width / 2 + padding + 42,
+      -height / 2 + padding,
+      translate(this.language, 'exploration.archive.title'),
+      {
+        fontFamily: gameConfig.visual.monoFontFamily,
+        fontSize: `${gameConfig.visual.infoPopupGalleryCreditFontSize}px`,
+        fontStyle: 'bold',
+        color: gameConfig.palette.electric,
+        letterSpacing: 1,
+      },
+    );
+    this.infoPopupClose = this.add.text(width / 2 - padding, -height / 2 + padding, translate(this.language, 'buttons.close'), {
+      fontFamily: gameConfig.visual.monoFontFamily,
+      fontSize: `${gameConfig.visual.infoPopupCloseFontSize}px`,
+      color: gameConfig.palette.electric,
+    }).setOrigin(1, 0).setInteractive({ useHandCursor: true });
+    this.infoPopupClose.on('pointerdown', () => this.closeInfoPopup());
+
+    this.infoPopupBody = this.add.text(contentLeft, contentTop, '', {
+      fontFamily: gameConfig.visual.bodyFontFamily,
+      fontSize: `${gameConfig.visual.infoPopupBodyFontSize}px`,
+      color: gameConfig.palette.text,
+      lineSpacing: 6,
+      wordWrap: { width: contentWidth },
+    });
+    this.infoPopupGallery = this.add.container(0, 0).setVisible(false);
+    this.infoPopupContent = this.add.container(0, 0);
+    this.infoPopupStatusBadge = this.add.text(0, 0, '', {
       fontFamily: gameConfig.visual.monoFontFamily,
       fontSize: `${gameConfig.visual.infoPopupGalleryCreditFontSize}px`,
-      color: gameConfig.palette.muted,
-      align: 'center',
-    }).setOrigin(0.5, 0);
-    this.infoPopupGallery.add([this.infoPopupCaption, this.infoPopupCredit]);
+      fontStyle: 'bold',
+      color: gameConfig.palette.electric,
+      backgroundColor: gameConfig.palette.buttonHover,
+      padding: { left: 10, right: 10, top: 6, bottom: 6 },
+      wordWrap: { width: contentWidth },
+    }).setVisible(false);
+    this.infoPopupContent.add([
+      this.infoPopupStatusBadge,
+      this.infoPopupBody,
+      this.infoPopupGallery,
+    ]);
 
-    if (this.infoPopupGalleryItems.length > 1) this.createInfoGalleryControls(imageWidth, imageHeight);
-    this.infoPopupGalleryIndex = 0;
-    this.updateInfoGallerySlide();
+    this.infoPopupTabButtons = {};
+    const tabKeys = ['story', 'science', 'status'];
+    const tabWidth = (width - padding * 2 - 16) / tabKeys.length;
+    tabKeys.forEach((tab, index) => {
+      const button = this.add.text(0, 0, translate(this.language, `exploration.archive.tabs.${tab}`), {
+        fontFamily: gameConfig.visual.monoFontFamily,
+        fontSize: `${gameConfig.visual.infoPopupGalleryCreditFontSize}px`,
+        color: gameConfig.palette.muted,
+        align: 'center',
+        backgroundColor: gameConfig.palette.background,
+        padding: { left: 8, right: 8, top: 9, bottom: 9 },
+        fixedWidth: tabWidth,
+      }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+      button.on('pointerdown', () => this.setInfoPopupTab(tab));
+      this.infoPopupTabButtons[tab] = button;
+    });
+
+    this.infoPopupContentMaskSource = this.make.graphics({ x: 0, y: 0, add: false });
+    this.infoPopupContentMaskSource.fillStyle(0xffffff, 1);
+    this.infoPopupContentMaskSource.fillRect(contentLeft, contentTop, contentWidth, contentHeight);
+    this.infoPopupContent.setMask(this.infoPopupContentMaskSource.createGeometryMask());
+
+    this.infoPopup.add([
+      this.infoPopupBackground,
+      this.infoPopupIcon,
+      this.infoPopupArchiveLabel,
+      this.infoPopupTitle,
+      this.infoPopupClose,
+      this.infoPopupContent,
+    ]);
+    this.infoPopup.add(Object.values(this.infoPopupTabButtons));
+    this.hud.add(this.infoPopup);
+
+    this.input.on('wheel', this.handleInfoPopupWheel, this);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      this.input.off('wheel', this.handleInfoPopupWheel, this);
+      this.infoPopupContentMaskSource.destroy();
+      this.infoPopupImageMaskSource?.destroy();
+    });
+  }
+
+  setInfoPopupTab(tab) {
+    this.infoPopupTab = tab;
+    this.infoPopupScrollOffset = 0;
+    this.infoPopupContent.setY(0);
+
+    const content = this.getArchiveContent(this.infoPopupTarget);
+    this.infoPopupBody.setText(content[tab] ?? '');
+    this.infoPopupStatusBadge
+      .setText(content.status ?? '')
+      .setVisible(tab === 'status');
+    this.infoPopupStatusDetails = content.statusDetails ?? '';
+    this.infoPopupTabButtons.story.setColor(
+      tab === 'story' ? gameConfig.palette.text : gameConfig.palette.muted,
+    ).setBackgroundColor(tab === 'story'
+      ? gameConfig.palette.buttonHover
+      : gameConfig.palette.background);
+    this.infoPopupTabButtons.science.setColor(
+      tab === 'science' ? gameConfig.palette.text : gameConfig.palette.muted,
+    ).setBackgroundColor(tab === 'science'
+      ? gameConfig.palette.buttonHover
+      : gameConfig.palette.background);
+    this.infoPopupTabButtons.status.setColor(
+      tab === 'status' ? gameConfig.palette.text : gameConfig.palette.muted,
+    ).setBackgroundColor(tab === 'status'
+      ? gameConfig.palette.buttonHover
+      : gameConfig.palette.background);
+
+    if (tab === 'status') this.infoPopupBody.setText(content.statusDetails ?? '');
+    const statusOffset = tab === 'status'
+      ? this.infoPopupStatusBadge.height + 12
+      : 0;
+    const galleryHeight = tab === 'science' && this.infoPopupGalleryItems.length > 0
+      ? gameConfig.visual.infoPopupGalleryGap
+        + gameConfig.visual.infoPopupGalleryImageHeight
+        + 54
+      : 0;
+    this.infoPopupContentHeight = this.infoPopupBody.height + statusOffset + galleryHeight;
+    this.resizeInfoPopupToContent();
+    this.updateInfoPopupScrollBounds();
   }
 
   getArchiveContent(target) {
@@ -1482,47 +1533,6 @@ export default class ExplorationScene extends Phaser.Scene {
       ),
       statusDetails: translate(this.language, 'exploration.archive.noMission'),
     };
-  }
-
-  setInfoPopupTab(tab) {
-    this.infoPopupTab = tab;
-    this.infoPopupScrollOffset = 0;
-    this.infoPopupContent.setY(0);
-
-    const content = this.getArchiveContent(this.infoPopupTarget);
-    this.infoPopupBody.setText(content[tab] ?? '');
-    this.infoPopupStatusBadge
-      .setText(content.status ?? '')
-      .setVisible(tab === 'status');
-    this.infoPopupStatusDetails = content.statusDetails ?? '';
-    this.infoPopupTabButtons.story.setColor(
-      tab === 'story' ? gameConfig.palette.text : gameConfig.palette.muted,
-    ).setBackgroundColor(tab === 'story'
-      ? gameConfig.palette.buttonHover
-      : gameConfig.palette.background);
-    this.infoPopupTabButtons.science.setColor(
-      tab === 'science' ? gameConfig.palette.text : gameConfig.palette.muted,
-    ).setBackgroundColor(tab === 'science'
-      ? gameConfig.palette.buttonHover
-      : gameConfig.palette.background);
-    this.infoPopupTabButtons.status.setColor(
-      tab === 'status' ? gameConfig.palette.text : gameConfig.palette.muted,
-    ).setBackgroundColor(tab === 'status'
-      ? gameConfig.palette.buttonHover
-      : gameConfig.palette.background);
-
-    if (tab === 'status') this.infoPopupBody.setText(content.statusDetails ?? '');
-    const statusOffset = tab === 'status'
-      ? this.infoPopupStatusBadge.height + 12
-      : 0;
-    const galleryHeight = tab === 'science' && this.infoPopupGalleryItems.length > 0
-      ? gameConfig.visual.infoPopupGalleryGap
-        + gameConfig.visual.infoPopupGalleryImageHeight
-        + 54
-      : 0;
-    this.infoPopupContentHeight = this.infoPopupBody.height + statusOffset + galleryHeight;
-    this.resizeInfoPopupToContent();
-    this.updateInfoPopupScrollBounds();
   }
 
   resizeInfoPopupToContent() {
@@ -1607,6 +1617,85 @@ export default class ExplorationScene extends Phaser.Scene {
     }
   }
 
+  openInfoPopup(target) {
+    if (target.data.equipmentType) {
+      this.rememberLegacy(target.id);
+      this.updateSurfaceObjectiveCounter();
+    }
+    this.infoPopupTarget = target;
+    this.infoPopupTitle.setText(localizedField(target.data, 'name', this.language) ?? target.name);
+    this.infoPopupScrollOffset = 0;
+    this.infoPopupContent.setY(0);
+    this.populateInfoGallery(target);
+    this.setInfoPopupTab('story');
+
+    const visual = target.data.visual;
+    const colorKey = visual?.colorKey ?? visual?.accentColorKey;
+    const iconColor = colorKey
+      ? gameConfig.palette[colorKey]
+      : gameConfig.palette.proximity;
+    this.infoPopupIcon.setFillStyle(Number.parseInt(iconColor.slice(1), 16), 1);
+    this.infoPopupOpen = true;
+    this.infoPopup.setVisible(true);
+    this.positionInfoPopup();
+  }
+
+  populateInfoGallery(target) {
+    this.infoPopupGallery.removeAll(true);
+    this.infoPopupGallery.setVisible(false);
+    this.infoPopupImageMaskSource?.destroy();
+    this.infoPopupImageMaskSource = null;
+    this.infoPopupImageMask = null;
+    this.infoPopupImage = null;
+    this.infoPopupGalleryItems = (target.data.gallery ?? []).filter((item) => (
+      item.assetId
+      && this.assets.images.some((asset) => asset.id === item.assetId)
+      && this.textures.exists(item.assetId)
+    ));
+    this.infoPopupScrollOffset = 0;
+    this.infoPopupContent.setY(0);
+
+    if (this.infoPopupGalleryItems.length === 0) return;
+
+    const width = gameConfig.visual.infoPopupWidth - gameConfig.visual.infoPopupPadding * 2;
+    const imageHeight = gameConfig.visual.infoPopupGalleryImageHeight;
+    const imageWidth = width;
+    const frame = this.add.graphics();
+    frame.fillStyle(Number.parseInt(gameConfig.palette.background.slice(1), 16), 0.92);
+    frame.fillRoundedRect(-imageWidth / 2, -imageHeight / 2, imageWidth, imageHeight, 8);
+    frame.lineStyle(1, Number.parseInt(gameConfig.palette.electric.slice(1), 16), 0.62);
+    frame.strokeRoundedRect(-imageWidth / 2, -imageHeight / 2, imageWidth, imageHeight, 8);
+    this.infoPopupGallery.add(frame);
+
+    this.infoPopupImage = this.add.image(0, 0, this.infoPopupGalleryItems[0].assetId);
+    this.fitInfoPopupImage();
+    this.infoPopupImageMaskSource = this.make.graphics({ x: 0, y: 0, add: false });
+    this.infoPopupImageMaskSource.fillStyle(0xffffff, 1);
+    this.infoPopupImageMaskSource.fillRoundedRect(-imageWidth / 2, -imageHeight / 2, imageWidth, imageHeight, 8);
+    this.infoPopupImageMask = this.infoPopupImageMaskSource.createGeometryMask();
+    this.infoPopupImage.setMask(this.infoPopupImageMask);
+    this.infoPopupGallery.add(this.infoPopupImage);
+
+    this.infoPopupCaption = this.add.text(0, imageHeight / 2 + 8, '', {
+      fontFamily: gameConfig.visual.bodyFontFamily,
+      fontSize: `${gameConfig.visual.infoPopupGalleryCaptionFontSize}px`,
+      color: gameConfig.palette.text,
+      align: 'center',
+      wordWrap: { width: imageWidth - 24 },
+    }).setOrigin(0.5, 0);
+    this.infoPopupCredit = this.add.text(0, imageHeight / 2 + 29, '', {
+      fontFamily: gameConfig.visual.monoFontFamily,
+      fontSize: `${gameConfig.visual.infoPopupGalleryCreditFontSize}px`,
+      color: gameConfig.palette.muted,
+      align: 'center',
+    }).setOrigin(0.5, 0);
+    this.infoPopupGallery.add([this.infoPopupCaption, this.infoPopupCredit]);
+
+    if (this.infoPopupGalleryItems.length > 1) this.createInfoGalleryControls(imageWidth, imageHeight);
+    this.infoPopupGalleryIndex = 0;
+    this.updateInfoGallerySlide();
+  }
+
   createInfoGalleryControls(width, imageHeight) {
     const controlY = imageHeight / 2 + 48;
     const color = gameConfig.palette.electric;
@@ -1672,9 +1761,7 @@ export default class ExplorationScene extends Phaser.Scene {
   }
 
   handleInfoPopupWheel(pointer, _objects, _deltaX, deltaY) {
-    if (!this.infoPopupOpen) return;
-
-    if (!this.infoPopupScrollMax) return;
+    if (!this.infoPopupOpen || !this.infoPopupScrollMax) return;
     const width = gameConfig.visual.infoPopupWidth * this.infoPopup.scaleX;
     const height = this.infoPopupHeight * this.infoPopup.scaleY;
     const withinPopup = Math.abs(pointer.x - this.infoPopup.x) <= width / 2
@@ -1688,74 +1775,6 @@ export default class ExplorationScene extends Phaser.Scene {
     );
     this.infoPopupContent.setY(-this.infoPopupScrollOffset);
     this.updateInfoPopupMasks();
-  }
-
-  updateZoomIndicator() {
-    const percent = Math.round((this.currentCameraZoom ?? gameConfig.world.camera.zoom) * 100);
-    this.zoomIndicator?.setText(
-      `${translate(this.language, 'exploration.zoomLabel')}: ${percent}%`,
-    );
-  }
-
-  getInfoText(target) {
-    const data = target.data;
-    const labels = translate(this.language, 'exploration.infoLabels');
-    const lines = [];
-    const addLine = (labelKey, value) => {
-      if (value === undefined || value === null || value === '') return;
-      lines.push(`${labels[labelKey]}: ${value}`);
-    };
-    const formatKilometers = (value) => `${Number(value).toLocaleString(this.language === 'en' ? 'en-US' : 'es-ES')} km`;
-
-    if (data.equipmentType) {
-      const realLocation = {
-        ...data.realLocation,
-        ...localizedField(data, 'realLocation', this.language),
-      };
-      const location = realLocation
-        ? [realLocation.description, realLocation.coordinates].filter(Boolean).join(' · ')
-        : undefined;
-      addLine('description', localizedField(data, 'description', this.language)
-        ?? localizedField(data, 'scientificDescription', this.language));
-      addLine('mission', localizedField(data, 'mission', this.language));
-      addLine('launchYear', data.launchYear);
-      addLine('destination', localizedField(data, 'destination', this.language));
-      addLine('objective', localizedField(data, 'objective', this.language));
-      addLine('discoveries', localizedField(data, 'discoveries', this.language));
-      addLine('status', localizedField(data, 'operationalStatus', this.language));
-      addLine('location', location);
-      addLine('whyRemains', localizedField(data, 'whyRemains', this.language));
-      addLine('legacy', localizedField(data, 'scientificLegacy', this.language));
-      addLine('source', data.source);
-    } else if (data.type === 'star') {
-      addLine('description', localizedField(data, 'description', this.language));
-      addLine('spectralType', data.spectralType);
-      addLine('surfaceTemperature', `${Number(data.surfaceTemperatureK).toLocaleString(
-        this.language === 'en' ? 'en-US' : 'es-ES',
-      )} K`);
-      addLine('mass', localizedField(data, 'mass', this.language));
-      addLine('composition', localizedField(data, 'composition', this.language)?.join(' · '));
-      addLine('source', data.source);
-    } else if (data.type === 'moon') {
-      const parent = this.celestialBodies.get(data.parentId);
-      addLine('description', localizedField(data, 'description', this.language));
-      addLine('parent', parent?.name);
-      addLine('diameter', formatKilometers(data.diameterKm));
-      addLine('distanceFromParent', formatKilometers(data.distanceFromParentKm));
-      addLine('discovery', localizedField(data, 'discoveryHistory', this.language));
-      addLine('importance', localizedField(data, 'scientificImportance', this.language));
-      addLine('source', data.source);
-    } else {
-      addLine('description', localizedField(data, 'description', this.language));
-      addLine('diameter', formatKilometers(data.diameterKm));
-      addLine('distanceFromSun', formatKilometers(data.distanceFromSunKm));
-      addLine('characteristics', localizedField(data, 'characteristics', this.language)?.join(' '));
-      addLine('history', localizedField(data, 'observationHistory', this.language));
-      addLine('interestingFact', localizedField(data, 'interestingFact', this.language));
-      addLine('source', data.source);
-    }
-
-    return lines.join('\n');
   }
 
   closeInfoPopup() {
@@ -1775,8 +1794,9 @@ export default class ExplorationScene extends Phaser.Scene {
     const scale = Math.min(1, (viewport.width - 24) / baseWidth, (viewport.height - 24) / baseHeight);
     const width = baseWidth * scale;
     const height = baseHeight * scale;
-    const targetX = camera.x + (target.x - camera.worldView.x) * camera.zoom;
-    const targetY = camera.y + (target.y - camera.worldView.y) * camera.zoom;
+    const targetPosition = this.getTargetPosition(target);
+    const targetX = camera.x + (targetPosition.x - camera.worldView.x) * camera.zoom;
+    const targetY = camera.y + (targetPosition.y - camera.worldView.y) * camera.zoom;
     const targetRadius = target.proximityRadius * camera.zoom;
     const gap = 18 * scale;
     const margin = 12;
@@ -1784,6 +1804,7 @@ export default class ExplorationScene extends Phaser.Scene {
     const maxCenterY = viewport.height - height / 2 - margin;
     const aboveY = targetY - targetRadius - gap - height / 2;
     const belowY = targetY + targetRadius + gap + height / 2;
+
     let panelX = targetX;
     let panelY;
 

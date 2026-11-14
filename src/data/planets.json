@@ -3,36 +3,15 @@
   "positionNote": "Las coordenadas se calculan desde la distancia media al Sol usando la compresión documentada en game-config.json; no son posiciones orbitales actuales.",
   "objects": [
     {
-      "id": "sun",
-      "name": "Sol",
-      "type": "star",
-      "diameterKm": 1392700,
-      "distanceFromSunKm": 0,
-      "visualLaneOffsetY": 0,
-      "visual": { "radius": 180, "stellar": true },
-      "description": "La estrella del sistema solar, una esfera de plasma cuya gravedad mantiene a los planetas en órbita.",
-      "spectralType": "G2V",
-      "surfaceTemperatureK": 5772,
-      "mass": "1.9885 × 10^30 kg",
-      "composition": ["≈ 73% hidrógeno", "≈ 25% helio", "≈ 2% elementos más pesados"],
-      "translations": { "en": {
-        "name": "Sun",
-        "description": "The star at the center of the solar system, a sphere of plasma whose gravity keeps the planets in orbit.",
-        "mass": "1.9885 × 10^30 kg",
-        "composition": ["≈ 73% hydrogen", "≈ 25% helium", "≈ 2% heavier elements"]
-      } },
-      "source": "https://science.nasa.gov/sun/facts/"
-    },
-    {
       "id": "mercury",
       "name": "Mercurio",
       "type": "planet",
       "diameterKm": 4879,
       "distanceFromSunKm": 57909050,
       "distanceFromEarthKm": 91700000,
-      "visualLaneOffsetY": -230,
+      "visualAngleDegrees": -25.35,
       "visual": {
-        "imageId": null,
+        "imageId": "planet_mercury_sprite",
         "colorKey": "mercury",
         "radiusScale": 1,
         "surfaceStyle": "cratered-rock",
@@ -67,10 +46,11 @@
       "diameterKm": 12104,
       "distanceFromSunKm": 108208000,
       "distanceFromEarthKm": 41400000,
-      "visualLaneOffsetY": -300,
+      "visualAngleDegrees": -24.32,
       "visual": {
-        "imageId": null,
+        "imageId": "planet_venus_sprite",
         "colorKey": "venus",
+        "atmosphereColorKey": "venusCloud",
         "radiusScale": 1,
         "surfaceStyle": "clouded-atmosphere",
         "bands": [
@@ -102,10 +82,11 @@
       "diameterKm": 12742,
       "distanceFromSunKm": 149597870,
       "distanceFromEarthKm": 0,
-      "visualLaneOffsetY": 30,
+      "visualAngleDegrees": 2.2,
       "visual": {
-        "imageId": "planet_earth_sprite",
         "colorKey": "earth",
+        "imageId": "planet_earth_sprite",
+        "atmosphereColorKey": "cabin",
         "accentColorKey": "earthLand",
         "radiusScale": 1,
         "surfaceStyle": "terrestrial",
@@ -142,10 +123,11 @@
       "diameterKm": 6779,
       "distanceFromSunKm": 227939200,
       "distanceFromEarthKm": 225000000,
-      "visualLaneOffsetY": 180,
+      "visualAngleDegrees": 10.58,
       "visual": {
-        "imageId": null,
+        "imageId": "planet_mars_sprite",
         "colorKey": "mars",
+        "atmosphereColorKey": "marsRim",
         "accentColorKey": "engineHot",
         "radiusScale": 1,
         "surfaceStyle": "rusted-rock",
@@ -180,10 +162,11 @@
       "diameterKm": 139820,
       "distanceFromSunKm": 778570000,
       "distanceFromEarthKm": 628730000,
-      "visualLaneOffsetY": -130,
+      "visualAngleDegrees": -4.18,
       "visual": {
         "imageId": "planet_jupiter_sprite",
         "colorKey": "jupiter",
+        "atmosphereColorKey": "jupiterLightBand",
         "radiusScale": 1,
         "surfaceStyle": "gas-bands",
         "bands": [
@@ -221,10 +204,11 @@
       "diameterKm": 116460,
       "distanceFromSunKm": 1433529000,
       "distanceFromEarthKm": 1275000000,
-      "visualLaneOffsetY": 200,
+      "visualAngleDegrees": 4.73,
       "visual": {
-        "imageId": null,
+        "imageId": "planet_saturn_sprite",
         "colorKey": "saturn",
+        "atmosphereColorKey": "saturnRing",
         "radiusScale": 1,
         "surfaceStyle": "gas-bands",
         "bands": [
@@ -257,10 +241,11 @@
       "diameterKm": 50724,
       "distanceFromSunKm": 2872463000,
       "distanceFromEarthKm": 2723950000,
-      "visualLaneOffsetY": -190,
+      "visualAngleDegrees": -3.18,
       "visual": {
         "imageId": "planet_uranus_sprite",
         "colorKey": "uranus",
+        "atmosphereColorKey": "uranusBand",
         "radiusScale": 1,
         "surfaceStyle": "ice-bands",
         "bands": [
@@ -291,10 +276,11 @@
       "diameterKm": 49244,
       "distanceFromSunKm": 4495060000,
       "distanceFromEarthKm": 4345000000,
-      "visualLaneOffsetY": 100,
+      "visualAngleDegrees": 1.34,
       "visual": {
         "imageId": "planet_neptune_sprite",
         "colorKey": "neptune",
+        "atmosphereColorKey": "neptuneBand",
         "radiusScale": 1,
         "surfaceStyle": "deep-ice-bands",
         "bands": [

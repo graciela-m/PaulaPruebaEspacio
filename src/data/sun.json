@@ -1,0 +1,39 @@
+{
+  "id": "sun",
+  "name": "Sol",
+  "type": "star",
+  "diameterKm": 1392700,
+  "distanceFromEarthKm": 149597870,
+  "visual": {
+    "imageId": "sun_illustrated",
+    "coronaColorKey": "sunCorona",
+    "coronaRadiusFactor": 1.12,
+    "radiusScale": 1
+  },
+  "description": "La estrella del sistema solar y su principal fuente de luz y energía. Su gravedad mantiene a los planetas y otros cuerpos en órbita.",
+  "observationHistory": "El Sol se observa desde la antigüedad. Galileo realizó observaciones telescópicas de manchas solares; el Observatorio Solar y Heliosférico y el Solar Dynamics Observatory estudian su actividad desde el espacio.",
+  "characteristics": [
+    "Es una estrella de tipo G de unos 4.6 mil millones de años.",
+    "Su energía se produce mediante fusión nuclear en el núcleo.",
+    "Su diámetro real es aproximadamente 109 veces el de la Tierra."
+  ],
+  "interestingFact": "La luz solar tarda unos 8 minutos y 20 segundos en llegar a la Tierra.",
+  "translations": {
+    "en": {
+      "name": "Sun",
+      "description": "The star at the center of the solar system and its main source of light and energy. Its gravity holds the planets and other bodies in orbit.",
+      "observationHistory": "The Sun has been observed since antiquity. Galileo made telescopic observations of sunspots; the Solar and Heliospheric Observatory and Solar Dynamics Observatory study its activity from space.",
+      "characteristics": [
+        "It is a G-type star about 4.6 billion years old.",
+        "Its energy is produced by nuclear fusion in its core.",
+        "Its real diameter is about 109 times Earth's diameter."
+      ],
+      "interestingFact": "Sunlight takes about 8 minutes and 20 seconds to reach Earth."
+    }
+  },
+  "gallery": [
+    { "assetId": "sun_image_full_disk" },
+    { "assetId": "sun_image_flare" }
+  ],
+  "source": "https://science.nasa.gov/sun/facts/"
+}

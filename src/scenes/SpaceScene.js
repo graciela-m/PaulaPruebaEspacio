@@ -153,9 +153,12 @@ export default class SpaceScene extends Phaser.Scene {
     });
     this.tagline.setText(translate(language, 'homeTagline'));
     this.startButton.label.setText(translate(language, 'buttons.start'));
+    this.continueButton.label.setText(translate(language, 'buttons.continue'));
+    this.backButton.label.setText(translate(language, 'buttons.back'));
+    this.exploreButton.label.setText(translate(language, 'buttons.startExploration'));
+    this.finalText.setText(translate(language, 'story.finalMessage'));
     this.updateLanguageSelection();
   }
-
   createStoryLayer() {
     const { palette, visual } = this;
     this.storyLayer = this.add.container(0, 0).setVisible(false).setAlpha(0);

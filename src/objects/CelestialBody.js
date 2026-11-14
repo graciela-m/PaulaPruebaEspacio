@@ -16,33 +16,34 @@ export default class CelestialBody {
     this.palette = gameConfig.palette;
     this.scene = scene;
     this.container = scene.add.container(data.worldPosition.x, data.worldPosition.y);
-    this.container.setDepth(this.type === 'star' ? 0 : 1);
-
-    if (data.visual.stellar) {
-      this.addStellarVisual(scene);
-    } else {
-      const glowColor = colorValue(this.palette.electric);
-      const halo = scene.add.circle(0, 0, this.radius + 11, glowColor, 0.035);
-      this.container.add(halo);
-
-      if (data.visual.rings) this.addRings(scene, data.visual.rings);
-
-      const imageAvailable = data.visual.imageId
-        && assets.images.some((image) => image.id === data.visual.imageId)
-        && scene.textures.exists(data.visual.imageId);
-
-      if (imageAvailable) {
-        const image = scene.add.image(0, 0, data.visual.imageId);
-        image.setDisplaySize(this.radius * 2, this.radius * 2);
-        this.container.add(image);
-      } else {
-        this.addPlaceholder(scene, data);
-      }
-
-      if (data.visual.rings) this.addFrontRing(scene, data.visual.rings);
-    }
+    this.container.setDepth(1);
 
     const glowColor = colorValue(this.palette.electric);
+    if (data.type === 'star') {
+      this.addSolarCorona(scene, data.visual);
+    } else {
+      const halo = scene.add.circle(0, 0, this.radius + 11, glowColor, 0.035);
+      this.container.add(halo);
+      if (data.visual.atmosphereColorKey) this.addAtmosphere(scene, data.visual);
+    }
+
+    if (data.visual.rings) this.addRings(scene, data.visual.rings);
+
+    const imageAvailable = data.visual.imageId
+      && assets.images.some((image) => image.id === data.visual.imageId && !image.mapArtifacts)
+      && scene.textures.exists(data.visual.imageId);
+
+    if (imageAvailable) {
+      const image = scene.add.image(0, 0, data.visual.imageId);
+      image.setDisplaySize(this.radius * 2, this.radius * 2);
+      this.container.add(image);
+    } else {
+      this.addPlaceholder(scene, data);
+    }
+
+    if (data.visual.atmosphereColorKey) this.addAtmosphereRim(scene, data.visual);
+    if (data.visual.rings) this.addFrontRing(scene, data.visual.rings);
+
     const ring = scene.add
       .circle(0, 0, this.radius + 8)
       .setStrokeStyle(gameConfig.visual.proximityRingWidth, glowColor, 0.85)
@@ -50,6 +51,7 @@ export default class CelestialBody {
     this.highlight = ring;
     this.container.add(ring);
 
+    // Mantenemos tus etiquetas flotantes al pasar el cursor (hover)
     createHoverLabel(
       scene,
       this.container,
@@ -60,87 +62,40 @@ export default class CelestialBody {
     );
   }
 
-  addStellarVisual(scene) {
-    const corona = scene.add.circle(
-      0,
-      0,
-      this.radius + 54,
-      colorValue(this.palette.sunGlow),
-      0.07,
-    ).setBlendMode(Phaser.BlendModes.ADD);
-    this.container.add(corona);
-
-    const rays = scene.add.graphics();
-    const rayCount = 44;
-    for (let index = 0; index < rayCount; index += 1) {
-      const angle = index * Math.PI * 2 / rayCount;
-      const innerRadius = this.radius * 0.98;
-      const outerRadius = this.radius + (index % 2 === 0 ? 30 : 17);
-      const halfWidth = index % 2 === 0 ? 0.025 : 0.018;
-      const points = [
-        new Phaser.Geom.Point(
-          Math.cos(angle - halfWidth) * innerRadius,
-          Math.sin(angle - halfWidth) * innerRadius,
-        ),
-        new Phaser.Geom.Point(Math.cos(angle) * outerRadius, Math.sin(angle) * outerRadius),
-        new Phaser.Geom.Point(
-          Math.cos(angle + halfWidth) * innerRadius,
-          Math.sin(angle + halfWidth) * innerRadius,
-        ),
-      ];
-      rays.fillStyle(colorValue(this.palette.sunLight), index % 2 === 0 ? 0.24 : 0.14);
-      rays.fillPoints(points, true);
-    }
-    rays.setBlendMode(Phaser.BlendModes.ADD);
-    this.container.add(rays);
-
-    const outerDisk = scene.add.circle(
-      0,
-      0,
-      this.radius,
-      colorValue(this.palette.sun),
-      1,
-    );
-    const middleDisk = scene.add.circle(
-      -this.radius * 0.04,
-      -this.radius * 0.05,
-      this.radius * 0.83,
-      colorValue(this.palette.sunGlow),
-      0.96,
-    );
-    const innerDisk = scene.add.circle(
-      -this.radius * 0.09,
-      -this.radius * 0.11,
-      this.radius * 0.62,
-      colorValue(this.palette.sunLight),
-      0.9,
-    );
-    const core = scene.add.circle(
-      -this.radius * 0.12,
-      -this.radius * 0.14,
-      this.radius * 0.34,
-      colorValue(this.palette.sphereHighlight),
-      0.28,
-    );
-    this.container.add([outerDisk, middleDisk, innerDisk, core]);
-
-    const surface = scene.add.graphics();
-    surface.lineStyle(2, colorValue(this.palette.sunLight), 0.18);
-    surface.strokeCircle(0, 0, this.radius * 0.9);
-    surface.lineStyle(1, colorValue(this.palette.sphereHighlight), 0.12);
-    surface.strokeCircle(0, 0, this.radius * 0.75);
-    this.container.add(surface);
-
-    scene.tweens.add({
-      targets: corona,
-      alpha: { from: 0.06, to: 0.12 },
-      scale: { from: 1, to: 1.035 },
-      duration: 2600,
-      ease: 'Sine.InOut',
-      yoyo: true,
-      repeat: -1,
+  addSolarCorona(scene, visual) {
+    const coronaColor = colorValue(this.palette[visual.coronaColorKey]);
+    const flareColor = colorValue(this.palette.sunFlare);
+    [
+      { factor: visual.coronaRadiusFactor * 1.22, alpha: 0.035, color: coronaColor },
+      { factor: visual.coronaRadiusFactor * 1.12, alpha: 0.075, color: coronaColor },
+      { factor: visual.coronaRadiusFactor * 1.04, alpha: 0.14, color: flareColor },
+    ].forEach(({ factor, alpha, color }) => {
+      this.container.add(scene.add.circle(0, 0, this.radius * factor, color, alpha));
     });
   }
+
+  addAtmosphere(scene, visual) {
+    const color = colorValue(this.palette[visual.atmosphereColorKey]);
+    [
+      { factor: 1.2, alpha: 0.025 },
+      { factor: 1.09, alpha: 0.055 },
+    ].forEach(({ factor, alpha }) => {
+      const glow = scene.add.circle(0, 0, this.radius * factor, color, alpha);
+      glow.setBlendMode(Phaser.BlendModes.ADD);
+      this.container.add(glow);
+    });
+  }
+
+  addAtmosphereRim(scene, visual) {
+    const rim = scene.add.circle(0, 0, this.radius + 0.5)
+      .setStrokeStyle(
+        Math.max(1, this.radius * 0.025),
+        colorValue(this.palette[visual.atmosphereColorKey]),
+        0.38,
+      );
+    this.container.add(rim);
+  }
+
 
   addRings(scene, ringData) {
     const ring = scene.add.graphics();

@@ -10,7 +10,7 @@
       "diameterKm": 3474.8,
       "distanceFromParentKm": 384400,
       "visualAngleDegrees": 215,
-      "visual": { "imageId": "moon_earth_sprite", "colorKey": "moon", "accentColorKey": "metal", "surfaceStyle": "lunar-rock", "surfaceFeaturesColorKey": "moonCrater", "surfaceRimColorKey": "sphereHighlight", "radiusScale": 1,
+      "visual": { "imageId": null, "colorKey": "moon", "accentColorKey": "metal", "surfaceStyle": "lunar-rock", "surfaceFeaturesColorKey": "moonCrater", "surfaceRimColorKey": "sphereHighlight", "radiusScale": 1,
         "surfaceFeatures": [
           { "type": "crater", "x": -0.36, "y": -0.08, "radius": 0.14 },
           { "type": "crater", "x": 0.22, "y": -0.34, "radius": 0.1 },
@@ -39,7 +39,7 @@
       "diameterKm": 22.4,
       "distanceFromParentKm": 9376,
       "visualAngleDegrees": 220,
-      "visual": { "imageId": null, "colorKey": "mars", "accentColorKey": "marsDark", "surfaceStyle": "irregular-rock", "surfaceShape": [[-0.85,-0.12],[-0.58,-0.68],[-0.12,-0.82],[0.48,-0.62],[0.83,-0.16],[0.7,0.42],[0.24,0.78],[-0.36,0.7],[-0.82,0.32]], "surfaceFeaturesColorKey": "marsDark", "surfaceRimColorKey": "marsRim", "radiusScale": 1,
+      "visual": { "imageId": "moon_phobos_sprite", "colorKey": "mars", "accentColorKey": "marsDark", "surfaceStyle": "irregular-rock", "surfaceShape": [[-0.85,-0.12],[-0.58,-0.68],[-0.12,-0.82],[0.48,-0.62],[0.83,-0.16],[0.7,0.42],[0.24,0.78],[-0.36,0.7],[-0.82,0.32]], "surfaceFeaturesColorKey": "marsDark", "surfaceRimColorKey": "marsRim", "radiusScale": 1,
         "surfaceFeatures": [
           { "type": "crater", "x": -0.28, "y": -0.18, "radius": 0.2 },
           { "type": "crater", "x": 0.34, "y": 0.24, "radius": 0.15 },
@@ -66,7 +66,7 @@
       "diameterKm": 12.4,
       "distanceFromParentKm": 23463,
       "visualAngleDegrees": 40,
-      "visual": { "imageId": null, "colorKey": "metal", "accentColorKey": "marsDark", "surfaceStyle": "irregular-rock", "surfaceShape": [[-0.82,-0.2],[-0.48,-0.7],[0.12,-0.86],[0.66,-0.48],[0.82,0.05],[0.55,0.62],[-0.04,0.82],[-0.68,0.52]], "surfaceFeaturesColorKey": "marsDark", "surfaceRimColorKey": "sphereHighlight", "radiusScale": 1,
+      "visual": { "imageId": "moon_deimos_sprite", "colorKey": "metal", "accentColorKey": "marsDark", "surfaceStyle": "irregular-rock", "surfaceShape": [[-0.82,-0.2],[-0.48,-0.7],[0.12,-0.86],[0.66,-0.48],[0.82,0.05],[0.55,0.62],[-0.04,0.82],[-0.68,0.52]], "surfaceFeaturesColorKey": "marsDark", "surfaceRimColorKey": "sphereHighlight", "radiusScale": 1,
         "surfaceFeatures": [
           { "type": "crater", "x": -0.25, "y": -0.2, "radius": 0.18 },
           { "type": "crater", "x": 0.3, "y": 0.24, "radius": 0.12 },
@@ -93,7 +93,7 @@
       "diameterKm": 3643,
       "distanceFromParentKm": 421700,
       "visualAngleDegrees": 20,
-      "visual": { "imageId": null, "colorKey": "venus", "accentColorKey": "engineHot", "surfaceStyle": "volcanic", "surfaceFeaturesColorKey": "marsDark", "surfaceRimColorKey": "venusCloud", "radiusScale": 1,
+      "visual": { "imageId": "moon_io_sprite", "colorKey": "venus", "accentColorKey": "engineHot", "surfaceStyle": "volcanic", "surfaceFeaturesColorKey": "marsDark", "surfaceRimColorKey": "venusCloud", "radiusScale": 1,
         "surfaceFeatures": [
           { "type": "patch", "x": -0.38, "y": -0.22, "width": 0.35, "height": 0.24, "rotation": 12, "alpha": 0.86 },
           { "type": "patch", "x": 0.25, "y": -0.3, "width": 0.28, "height": 0.19, "rotation": -20, "alpha": 0.8 },
@@ -121,7 +121,7 @@
       "diameterKm": 3122,
       "distanceFromParentKm": 671100,
       "visualAngleDegrees": 100,
-      "visual": { "imageId": "moon_europa_sprite", "colorKey": "iceHighlight", "accentColorKey": "moon", "surfaceStyle": "icy-fractures", "surfaceFeaturesColorKey": "cabin", "radiusScale": 1,
+      "visual": { "imageId": "moon_europa_procedural_sprite", "colorKey": "iceHighlight", "accentColorKey": "moon", "surfaceStyle": "icy-fractures", "surfaceFeaturesColorKey": "cabin", "radiusScale": 1,
         "surfaceFeatures": [
           { "type": "crack", "points": [[-0.72,-0.24],[-0.3,-0.08],[0.02,0.02],[0.3,0.24],[0.65,0.32]], "width": 0.035, "alpha": 0.74 },
           { "type": "crack", "points": [[-0.12,-0.8],[-0.05,-0.43],[0.02,-0.08],[-0.14,0.24]], "width": 0.024, "alpha": 0.6 },
@@ -148,7 +148,7 @@
       "diameterKm": 5268,
       "distanceFromParentKm": 1070400,
       "visualAngleDegrees": 180,
-      "visual": { "imageId": "moon_ganymede_sprite", "colorKey": "uranus", "accentColorKey": "moonCrater", "surfaceStyle": "icy-patches", "surfaceFeaturesColorKey": "iceHighlight", "surfaceRimColorKey": "moonCrater", "radiusScale": 1,
+      "visual": { "imageId": null, "colorKey": "uranus", "accentColorKey": "moonCrater", "surfaceStyle": "icy-patches", "surfaceFeaturesColorKey": "iceHighlight", "surfaceRimColorKey": "moonCrater", "radiusScale": 1,
         "surfaceFeatures": [
           { "type": "patch", "x": -0.35, "y": -0.2, "width": 0.43, "height": 0.25, "rotation": -18, "alpha": 0.6 },
           { "type": "patch", "x": 0.28, "y": 0.34, "width": 0.4, "height": 0.3, "rotation": 14, "alpha": 0.52 },
@@ -175,7 +175,7 @@
       "diameterKm": 4821,
       "distanceFromParentKm": 1882700,
       "visualAngleDegrees": 260,
-      "visual": { "imageId": "moon_callisto_sprite", "colorKey": "metal", "accentColorKey": "moonCrater", "surfaceStyle": "ancient-craters", "surfaceFeaturesColorKey": "moonCrater", "surfaceRimColorKey": "sphereHighlight", "radiusScale": 1,
+      "visual": { "imageId": null, "colorKey": "metal", "accentColorKey": "moonCrater", "surfaceStyle": "ancient-craters", "surfaceFeaturesColorKey": "moonCrater", "surfaceRimColorKey": "sphereHighlight", "radiusScale": 1,
         "surfaceFeatures": [
           { "type": "crater", "x": -0.48, "y": -0.18, "radius": 0.18 },
           { "type": "crater", "x": 0.16, "y": -0.38, "radius": 0.14 },
@@ -204,7 +204,7 @@
       "diameterKm": 5150,
       "distanceFromParentKm": 1221870,
       "visualAngleDegrees": 300,
-      "visual": { "imageId": null, "colorKey": "venus", "accentColorKey": "engineHot", "surfaceStyle": "hazy-atmosphere", "bands": [
+      "visual": { "imageId": "moon_titan_sprite", "colorKey": "venus", "accentColorKey": "engineHot", "surfaceStyle": "hazy-atmosphere", "bands": [
         { "y": -0.55, "thickness": 0.23, "colorKey": "venusCloud", "alpha": 0.55, "wave": 0.035 },
         { "y": -0.12, "thickness": 0.2, "colorKey": "venusCloudShade", "alpha": 0.24, "wave": 0.04 },
         { "y": 0.32, "thickness": 0.28, "colorKey": "venusCloud", "alpha": 0.42, "wave": 0.035 }
@@ -229,7 +229,7 @@
       "diameterKm": 504.2,
       "distanceFromParentKm": 237948,
       "visualAngleDegrees": 80,
-      "visual": { "imageId": null, "colorKey": "iceHighlight", "accentColorKey": "cabin", "surfaceStyle": "icy-geysers", "surfaceFeaturesColorKey": "uranusBand", "surfaceRimColorKey": "sphereHighlight", "radiusScale": 1,
+      "visual": { "imageId": "moon_enceladus_sprite", "colorKey": "iceHighlight", "accentColorKey": "cabin", "surfaceStyle": "icy-geysers", "surfaceFeaturesColorKey": "uranusBand", "surfaceRimColorKey": "sphereHighlight", "radiusScale": 1,
         "surfaceFeatures": [
           { "type": "crack", "points": [[-0.44,0.68],[-0.3,0.4],[-0.16,0.22]], "width": 0.025, "alpha": 0.55 },
           { "type": "crack", "points": [[-0.12,0.8],[0.04,0.53],[0.18,0.36]], "width": 0.03, "alpha": 0.7 },
@@ -257,7 +257,7 @@
       "diameterKm": 1577.8,
       "distanceFromParentKm": 435910,
       "visualAngleDegrees": 135,
-      "visual": { "imageId": null, "colorKey": "metal", "accentColorKey": "mars", "surfaceStyle": "fractured-ice", "surfaceFeaturesColorKey": "moonCrater", "surfaceRimColorKey": "sphereHighlight", "radiusScale": 1,
+      "visual": { "imageId": "moon_titania_sprite", "colorKey": "metal", "accentColorKey": "mars", "surfaceStyle": "fractured-ice", "surfaceFeaturesColorKey": "moonCrater", "surfaceRimColorKey": "sphereHighlight", "radiusScale": 1,
         "surfaceFeatures": [
           { "type": "crater", "x": -0.32, "y": -0.34, "radius": 0.16 },
           { "type": "crater", "x": 0.33, "y": 0.2, "radius": 0.13 },
@@ -285,7 +285,7 @@
       "diameterKm": 2706.8,
       "distanceFromParentKm": 354800,
       "visualAngleDegrees": 215,
-      "visual": { "imageId": null, "colorKey": "uranus", "accentColorKey": "cabin", "surfaceStyle": "icy-geysers", "surfaceFeaturesColorKey": "iceCrack", "surfaceRimColorKey": "iceHighlight", "radiusScale": 1,
+      "visual": { "imageId": "moon_triton_sprite", "colorKey": "uranus", "accentColorKey": "cabin", "surfaceStyle": "icy-geysers", "surfaceFeaturesColorKey": "iceCrack", "surfaceRimColorKey": "iceHighlight", "radiusScale": 1,
         "bands": [
           { "y": -0.62, "thickness": 0.18, "colorKey": "iceHighlight", "alpha": 0.28, "wave": 0.025 },
           { "y": 0.58, "thickness": 0.15, "colorKey": "iceHighlight", "alpha": 0.24, "wave": 0.02 }

@@ -24,6 +24,7 @@ export default function createActionButton(scene, options) {
 
   const createHitArea = (buttonWidth, buttonHeight) =>
     new Phaser.Geom.Rectangle(-buttonWidth / 2, -buttonHeight / 2, buttonWidth, buttonHeight);
+  
   container.setInteractive(createHitArea(width, height), Phaser.Geom.Rectangle.Contains);
   let enabled = true;
 

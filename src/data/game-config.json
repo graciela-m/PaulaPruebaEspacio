@@ -20,6 +20,9 @@
     "earth": "#2675C9",
     "earthLand": "#60B58A",
     "moon": "#AAB5C5",
+    "sun": "#FF8A24",
+    "sunCorona": "#FFB347",
+    "sunFlare": "#FFE09A",
     "moonCrater": "#657488",
     "mercuryCrater": "#555D67",
     "mercuryRim": "#C2C5C6",
@@ -51,10 +54,7 @@
     "cabin": "#40B8FF",
     "engine": "#53BFFF",
     "engineHot": "#F4A66A",
-    "proximity": "#7DD9FF",
-    "sun": "#F58A32",
-    "sunLight": "#FFE89A",
-    "sunGlow": "#FFB341"
+    "proximity": "#7DD9FF"
   },
   "visual": {
     "displayFontFamily": "Trebuchet MS, Arial, sans-serif",
@@ -84,14 +84,14 @@
     "equipmentLabelFontSize": 12,
     "hudTitleFontSize": 18,
     "hudBodyFontSize": 13,
-    "proximityPanelWidth": 410,
-    "proximityPanelHeight": 84,
-    "infoPopupWidth": 500,
-    "infoPopupHeight": 520,
-    "infoPopupMinHeight": 320,
-    "infoPopupPadding": 24,
+    "proximityPanelWidth": 360,
+    "proximityPanelHeight": 68,
+    "infoPopupWidth": 470,
+    "infoPopupHeight": 500,
+    "infoPopupMinHeight": 190,
+    "infoPopupPadding": 20,
     "infoPopupTitleFontSize": 19,
-    "infoPopupBodyFontSize": 14,
+    "infoPopupBodyFontSize": 12,
     "infoPopupCloseFontSize": 13,
     "infoPopupGalleryImageHeight": 152,
     "infoPopupGalleryGap": 18,
@@ -102,6 +102,11 @@
     "languageButtonFontSize": 13,
     "languageButtonWidth": 112,
     "languageButtonHeight": 34,
+    "epilogueTitleFontSize": 34,
+    "epiloguePhraseFontSize": 26,
+    "epilogueSmallFontSize": 13,
+    "epilogueButtonWidth": 210,
+    "epilogueButtonHeight": 42,
     "markerRadius": 7,
     "proximityRingWidth": 2
   },
@@ -111,18 +116,28 @@
     "starDriftMs": 24000,
     "starTwinkleMs": 3600
   },
+  "epilogue": {
+    "phraseFadeMs": 750,
+    "phraseHoldMs": 3700,
+    "phraseGapMs": 180,
+    "sceneTransitionMs": 1500,
+    "spacecraftDriftMs": 9000,
+    "surfacePanMs": 18000,
+    "earthDawnMs": 18000
+  },
   "world": {
     "width": 4800,
     "height": 2200,
     "coordinateSystem": {
       "unit": "UN",
-      "description": "UN (unidad de navegación) es una coordenada visual de juego, no una conversión a kilómetros. Las posiciones planetarias se calculan desde el Sol con x = referenciaSolarX + raíz(distanciaMediaSolKm / 1 000 000) × unidadesPorRaízMillónKm. Esta compresión conserva el orden y reduce las zonas vacías; no representa posiciones orbitales actuales.",
+      "description": "UN es una unidad de navegación del juego, no una conversión directa a kilómetros. El radio orbital visual se comprime desde la distancia media al Sol y se proyecta con el ángulo estático de cada planeta; no representa una fecha orbital real.",
       "scaleContext": "interplanetary-schematic",
       "surfaceScaleContext": "local-body-surface",
       "planetDistance": {
-        "sunReferenceX": 220,
+        "sunReferenceX": 300,
         "sunReferenceY": 1100,
-        "unitsPerSqrtMillionKm": 63.8
+        "unitsPerSqrtMillionKm": 60.5,
+        "formula": "radioUN = raíz(distanciaMediaSolKm / 1 000 000) × unidadesPorRaízMillónKm; x = referenciaSolarX + radioUN × cos(ánguloVisual); y = referenciaSolarY + radioUN × sin(ánguloVisual). Los ángulos forman una disposición esquemática estática y no representan una fecha orbital real."
       },
       "planetDiameter": {
         "referencePlanetId": "earth",
@@ -146,6 +161,15 @@
         "baseGap": 38,
         "compressedOrbitSpan": 90,
         "formula": "radioOrbitalVisual = radioVisualPlaneta + separaciónBase + raíz(distanciaOrbitalMediaKm / distanciaOrbitalMáximaKm) × tramoComprimido"
+      },
+      "sunDiameter": {
+        "referenceVisualRadius": 58,
+        "realSunDiameterKm": 1392700,
+        "earthDiameterKm": 12742,
+        "diameterExponent": 0.25,
+        "minimumVisualRadius": 176,
+        "maximumVisualRadius": 190,
+        "formula": "radioSolVisual = limitar(radioTierra × (diámetroSolKm / diámetroTierraKm)^exponente, radioMínimo, radioMáximo)"
       }
     },
     "camera": {
